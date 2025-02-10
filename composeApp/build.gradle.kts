@@ -35,6 +35,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -71,6 +72,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.mediation.test.suite)
     debugImplementation(compose.uiTooling)
 }
 
