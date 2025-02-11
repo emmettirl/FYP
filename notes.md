@@ -1,3 +1,5 @@
+Android Ladybug release required for Gradle
+
 Sync Gradle First
 
 ```bash

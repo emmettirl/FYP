@@ -36,6 +36,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+            implementation("dev.zt64:compose-pdf:1.2.0")
+            implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc10")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -73,6 +75,7 @@ android {
 
 dependencies {
     implementation(libs.mediation.test.suite)
+    implementation(libs.androidx.foundation.android)
     debugImplementation(compose.uiTooling)
 }
 
