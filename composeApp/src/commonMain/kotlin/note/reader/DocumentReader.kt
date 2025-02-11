@@ -28,7 +28,11 @@ import dev.zt64.compose.pdf.rememberLocalPdfState
 import java.io.File
 
 @Composable
-fun DocumentReader(currentPage: Int, onPageChange: (Int) -> Unit) {
+fun DocumentReader(
+    currentPage: Int,
+    onPageChange: (Int) -> Unit,
+    onPageCountChange: (Int) -> Unit
+    ) {
     val pdfState = rememberLocalPdfState(File("D:\\Documents\\code\\FYP\\SampleFiles\\sample1.pdf"))
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { pdfState.pageCount })
 
@@ -36,6 +40,10 @@ fun DocumentReader(currentPage: Int, onPageChange: (Int) -> Unit) {
         snapshotFlow { pagerState.currentPage }.collect { page ->
             onPageChange(page)
         }
+    }
+
+    LaunchedEffect(pdfState.pageCount) {
+        onPageCountChange(pdfState.pageCount)
     }
 
     Column {

@@ -36,6 +36,7 @@ fun App() {
 @Composable
 fun TwoPaneView() {
     var currentPage by remember { mutableStateOf(0) }
+    var documentPageCount by remember { mutableStateOf(0) }
 
     Row(modifier = Modifier.fillMaxSize()) {
         Surface(
@@ -44,16 +45,19 @@ fun TwoPaneView() {
                 .fillMaxHeight()
                 .padding(8.dp)
         ) {
-            DocumentReader(currentPage = currentPage, onPageChange = { newPage ->
-                currentPage = newPage})
-        }
+            DocumentReader(
+                currentPage = currentPage,
+                onPageChange = { newPage -> currentPage = newPage},
+                onPageCountChange = { pageCount -> documentPageCount = pageCount }
+                )
+            }
         Surface(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
                 .padding(8.dp)
         ) {
-            NoteEditor(documentPage = currentPage)
+            NoteEditor(documentPage = currentPage, pageCount = documentPageCount)
         }
     }
 
