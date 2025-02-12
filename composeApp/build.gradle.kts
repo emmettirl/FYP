@@ -38,6 +38,7 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
             implementation("dev.zt64:compose-pdf:1.2.0")
             implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc10")
+            implementation("org.apache.poi:poi-ooxml:5.3.0")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
