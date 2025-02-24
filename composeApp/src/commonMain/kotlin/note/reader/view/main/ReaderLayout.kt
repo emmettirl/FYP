@@ -15,7 +15,7 @@ import note.reader.view.helper_functions.titleCase
 
 
 @Composable
-fun MainLayout() {
+fun ReaderLayout() {
     Column(modifier = Modifier.fillMaxSize()) {
         MenuBar(title = titleCase(ProgramState.currentLayout.toString()))
         Box(

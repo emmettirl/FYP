@@ -7,7 +7,7 @@ import note.reader.controller.ProgramState
 import note.reader.model.enums.Layouts
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import note.reader.view.home.HomeLayout as Home
-import note.reader.view.main.MainLayout as Main
+import note.reader.view.main.ReaderLayout as Reader
 
 
 @Composable
@@ -20,7 +20,7 @@ fun App() {
     // Run application
     MaterialTheme {
         when(ProgramState.currentLayout) {
-            Layouts.MAIN -> Main()
+            Layouts.READER -> Reader()
             Layouts.HOME -> Home()
         }
     }

@@ -14,10 +14,10 @@ import note.reader.view.helper_functions.titleCase
 fun MenuButton(modifier: Modifier) {
     Button(
         onClick = {
-            if (ProgramState.currentLayout == Layouts.MAIN) {
+            if (ProgramState.currentLayout == Layouts.READER) {
                 ProgramState.currentLayout = Layouts.HOME
             } else if (ProgramState.currentLayout == Layouts.HOME) {
-                ProgramState.currentLayout = Layouts.MAIN
+                ProgramState.currentLayout = Layouts.READER
             }
         },
         modifier = modifier,
@@ -26,10 +26,10 @@ fun MenuButton(modifier: Modifier) {
             contentColor = Color.White
         )
     ) {
-        if (ProgramState.currentLayout == Layouts.MAIN) {
+        if (ProgramState.currentLayout == Layouts.READER) {
             Text("To ${titleCase(Layouts.HOME.toString())}")
         } else if (ProgramState.currentLayout == Layouts.HOME) {
-            Text("To ${titleCase(Layouts.MAIN.toString())}")
+            Text("To ${titleCase(Layouts.READER.toString())}")
 
         }
     }
