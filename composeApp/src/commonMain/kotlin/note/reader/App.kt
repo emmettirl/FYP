@@ -3,17 +3,26 @@ package note.reader
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import note.reader.controller.FileSystem
-import note.reader.view.main.MainLayout
+import note.reader.controller.ProgramState
+import note.reader.model.enums.Layouts
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import note.reader.view.home.HomeLayout as Home
+import note.reader.view.main.MainLayout as Main
 
 
 @Composable
 @Preview
 fun App() {
-    val fileSystem = FileSystem()
 
+    // Initialize the file system Singleton
+    FileSystem
+
+    // Run application
     MaterialTheme {
-        MainLayout()
+        when(ProgramState.currentLayout) {
+            Layouts.MAIN -> Main()
+            Layouts.HOME -> Home()
+        }
     }
 }
 

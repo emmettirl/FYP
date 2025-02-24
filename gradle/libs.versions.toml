@@ -22,6 +22,7 @@ mediationTestSuite = "3.0.0"
 foundationAndroid = "1.7.7"
 poiOoxml = "5.3.0"
 richeditorCompose = "1.0.0-rc10"
+uiUnitAndroid = "1.7.8"
 
 [libraries]
 compose-pdf = { module = "dev.zt64:compose-pdf", version.ref = "composePdf" }
@@ -44,6 +45,7 @@ mediation-test-suite = { group = "com.google.android.ads", name = "mediation-tes
 androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
 poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 richeditor-compose = { module = "com.mohamedrejeb.richeditor:richeditor-compose", version.ref = "richeditorCompose" }
+androidx-ui-unit-android = { group = "androidx.compose.ui", name = "ui-unit-android", version.ref = "uiUnitAndroid" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

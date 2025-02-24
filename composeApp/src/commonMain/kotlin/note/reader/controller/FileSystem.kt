@@ -5,7 +5,7 @@ import java.io.File
 import kotlinx.serialization.json.*
 import kotlinx.serialization.serializer
 
-class FileSystem {
+object FileSystem {
     val appDataFolder = System.getenv("APPDATA")
     val documents_folder = "$appDataFolder\\NoteReader"
 
@@ -45,7 +45,7 @@ class FileSystem {
                         document_map[key]!!.missing = false
                     }
                     // if folder for document notes does not exist, create it
-                    println("Value: ${document_map[key].toString()}")
+//                    println("Value: ${document_map[key].toString()}")
                     if (!File(document_map[key]!!.folderPath).isDirectory) {
                         createFolder(document_map[key]!!.folderPath)
                     }

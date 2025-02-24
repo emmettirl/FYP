@@ -82,6 +82,7 @@ android {
 dependencies {
     implementation(libs.mediation.test.suite)
     implementation(libs.androidx.foundation.android)
+    implementation(libs.androidx.ui.unit.android)
     debugImplementation(compose.uiTooling)
 }
 

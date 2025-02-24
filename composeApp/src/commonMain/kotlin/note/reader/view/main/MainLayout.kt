@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import note.reader.view.main.menu.MenuBar
 
+
 @Composable
 fun MainLayout() {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -24,4 +25,5 @@ fun MainLayout() {
         }
         MenuBar("Bottom Menu")
     }
+
 }
