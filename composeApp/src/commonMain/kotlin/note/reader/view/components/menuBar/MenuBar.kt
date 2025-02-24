@@ -37,11 +37,20 @@ fun MenuBar(title: String) {
             Row(
                 modifier = Modifier.padding(horizontal = HORIZONTAL_PADDING).fillMaxWidth().align(Alignment.CenterVertically)
             ) {
-                MenuButton(modifier = Modifier.weight(1F).padding(horizontal = 2.dp))
-                MenuButton(modifier = Modifier.weight(1F).padding(horizontal = 2.dp))
-                MenuButton(modifier = Modifier.weight(1F).padding(horizontal = 2.dp))
-                MenuButton(modifier = Modifier.weight(1F).padding(horizontal = 2.dp))
-                MenuButton(modifier = Modifier.weight(1F).padding(horizontal = 2.dp))
+                val buttonModifier = Modifier.weight(1F).padding(horizontal = 2.dp)
+
+                MenuButton(
+                    modifier = buttonModifier,
+                    onClick = menuButtonLambdaMap[MenuButtonEnum.HOME]!!.onClick,
+                    content = menuButtonLambdaMap[MenuButtonEnum.HOME]!!.content
+                )
+                MenuButton(buttonModifier)
+                MenuButton(buttonModifier)
+                MenuButton(buttonModifier)
+                MenuButton(buttonModifier)
+                MenuButton(buttonModifier)
+                MenuButton(buttonModifier)
+
             }
         }
     }
