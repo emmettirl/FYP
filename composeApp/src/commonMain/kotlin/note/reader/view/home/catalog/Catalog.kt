@@ -14,15 +14,12 @@ import note.reader.model.enums.DocumentFormats
 fun Catalog(modifier: Modifier) {
 
     for (key in FileSystemController.document_map.keys){
-        var bgColor: Color
-        if (key.substringAfterLast(".").lowercase() in DocumentFormats.entries.toString().lowercase()) {
-            bgColor = Color.Gray
-        } else {
-            bgColor = Color.Red
-        }
+        val supportedDocType: Boolean = (key.substringAfterLast(".").lowercase() in DocumentFormats.entries.toString().lowercase())
+        val bgColor = if (!supportedDocType) {Color.Red} else {Color.Gray}
+        val clickAction: () -> Unit = if (supportedDocType) { { println(key) } } else { { println("Unsupported file type") } }
 
         Button(
-            onClick = { println(key) },
+            onClick = clickAction,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = bgColor,
                 contentColor = Color.White
