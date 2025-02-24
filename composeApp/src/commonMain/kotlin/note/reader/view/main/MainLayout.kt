@@ -8,13 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import note.reader.view.main.menu.MenuBar
+import note.reader.controller.ProgramState
+import note.reader.view.main.components.TwoPaneView
+import note.reader.view.components.menuBar.MenuBar
+import note.reader.view.helper_functions.titleCase
 
 
 @Composable
 fun MainLayout() {
     Column(modifier = Modifier.fillMaxSize()) {
-        MenuBar("Top Menu")
+        MenuBar(title = titleCase(ProgramState.currentLayout.toString()))
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -23,7 +26,5 @@ fun MainLayout() {
         ) {
             TwoPaneView()
         }
-        MenuBar("Bottom Menu")
     }
-
 }

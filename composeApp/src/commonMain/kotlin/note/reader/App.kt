@@ -2,7 +2,7 @@ package note.reader
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import note.reader.controller.FileSystem
+import note.reader.controller.FileSystemController
 import note.reader.controller.ProgramState
 import note.reader.model.enums.Layouts
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -15,7 +15,7 @@ import note.reader.view.main.MainLayout as Main
 fun App() {
 
     // Initialize the file system Singleton
-    FileSystem
+    FileSystemController
 
     // Run application
     MaterialTheme {

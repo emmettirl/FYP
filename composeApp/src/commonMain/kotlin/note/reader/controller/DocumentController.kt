@@ -1,4 +1,4 @@
 package note.reader.controller
 
-class PageController {
+class DocumentController {
 }

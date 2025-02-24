@@ -5,7 +5,7 @@ import java.io.File
 import kotlinx.serialization.json.*
 import kotlinx.serialization.serializer
 
-object FileSystem {
+object FileSystemController {
     val appDataFolder = System.getenv("APPDATA")
     val documents_folder = "$appDataFolder\\NoteReader"
 
