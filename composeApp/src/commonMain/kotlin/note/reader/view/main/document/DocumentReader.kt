@@ -1,5 +1,6 @@
-package note.reader
+package note.reader.view.main.document
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,69 +11,61 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mohamedrejeb.richeditor.model.RichTextState
-import com.mohamedrejeb.richeditor.model.rememberRichTextState
-import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
+import dev.zt64.compose.pdf.component.PdfPage
+import dev.zt64.compose.pdf.rememberLocalPdfState
+import java.io.File
 
 @Composable
-fun NoteEditor(documentPage: Int, pageCount: Int,) {
+fun DocumentReader(
+    currentPage: Int,
+    onPageChange: (Int) -> Unit,
+    onPageCountChange: (Int) -> Unit
+    ) {
+    val pdfState = rememberLocalPdfState(File("D:\\Documents\\code\\FYP\\SampleFiles\\sample1.pdf"))
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = { pdfState.pageCount })
 
-    var notes by remember { mutableStateOf(listOf("Test 1", " Test 2")) }
-    var noteRichtextStates = remember { mutableStateListOf<RichTextState>() }
-
-    if (noteRichtextStates.isEmpty()) {
-        for (note in notes) {
-            val state = rememberRichTextState()
-            state.setText(note)
-            noteRichtextStates += state
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }.collect { page ->
+            onPageChange(page)
         }
     }
 
-    val pagerState = rememberPagerState(
-        initialPage = 0,
-        initialPageOffsetFraction = 0F,
-        pageCount = { notes.size }
-    )
-
-    LaunchedEffect(documentPage) {
-        pagerState.animateScrollToPage(documentPage)
+    LaunchedEffect(pdfState.pageCount) {
+        onPageCountChange(pdfState.pageCount)
     }
 
     Column {
         Text(
-            text = "Notes Editor",
+            text = "Document Reader",
             style = TextStyle(fontSize = 20.sp),
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth().padding(8.dp)
         )
         Text(
-            text = "Page: ${documentPage + 1} / ${notes.size}",
+            text = "Page: ${currentPage + 1} / ${pdfState.pageCount}",
             style = TextStyle(fontSize = 20.sp),
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth().padding(8.dp)
         )
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().background(Color.DarkGray),
             contentAlignment = Alignment.Center,
         ) {
             VerticalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) { page ->
-                RichTextEditor(
-                    modifier = Modifier.fillMaxSize(),
-                    state = noteRichtextStates[page],
+                PdfPage(
+                    state = pdfState,
+                    index = page
                 )
             }
         }
