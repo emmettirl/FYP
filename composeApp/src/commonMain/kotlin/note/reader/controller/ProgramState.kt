@@ -6,6 +6,7 @@ import note.reader.model.Document
 import note.reader.model.enums.DocumentFormats
 import note.reader.model.enums.Layouts
 
+
 object ProgramState {
     private val _currentLayout: MutableState<Layouts> = mutableStateOf(Layouts.HOME)
     var currentLayout: Layouts
@@ -43,6 +44,16 @@ object ProgramState {
         set(value) {
             _currentPageCount.value = value
             println("pagecountChanged: $value")
+        }
+
+
+    private val _currentIdIndex: MutableState<Int> = mutableStateOf(0)
+    var currentIdIndex: Int = _currentIdIndex.value
+        // Getter generates note ids
+        get() {
+            _currentIdIndex.value = _currentIdIndex.value.inc()
+            field = _currentIdIndex.value
+            return field
         }
 
     override fun toString(): String {

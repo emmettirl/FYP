@@ -10,6 +10,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,22 +26,34 @@ import com.mohamedrejeb.richeditor.model.RichTextState
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
 import note.reader.controller.ProgramState
+import note.reader.model.Note
 
 @Composable
 fun NoteEditor(
     ) {
 
     println("pageCount: ${ProgramState.currentPageCount}")
-    var notes by remember { mutableStateOf(List(ProgramState.currentPageCount) { "" }) }
+    var notes by remember { mutableStateOf(listOf<Note>()) }
     println("notes: $notes")
 
-    var noteRichTextStates = remember { mutableStateListOf<RichTextState>() }
+    val noteRichTextStates = remember { mutableStateListOf<RichTextState>() }
 
-        while (noteRichTextStates.size < notes.size) {
+        while (noteRichTextStates.size.coerceAtLeast(1) < notes.size) {
             val state = rememberRichTextState()
-            state.setText(notes[noteRichTextStates.size])
+            state.setText(notes[noteRichTextStates.size].content)
             noteRichTextStates.add(rememberRichTextState())
         }
+
+    SideEffect() {
+        notes = List(ProgramState.currentPageCount) {
+            Note(
+                note_id = ProgramState.currentIdIndex,
+                source_name = ProgramState.currentDocument.title,
+                content = ""
+            )
+        }
+    }
+
 
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -49,7 +62,6 @@ fun NoteEditor(
     )
 
     LaunchedEffect(ProgramState.currentPage) {
-        notes = List(ProgramState.currentPageCount) { "" }
         pagerState.animateScrollToPage(ProgramState.currentPage)
     }
 
@@ -74,9 +86,16 @@ fun NoteEditor(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) { page ->
+                // Ensure that a rich text state exists for compose, which will be overwritten by current state when loaded
+                val RTState: RichTextState
+                if (noteRichTextStates.size > 0) {
+                    RTState = noteRichTextStates[page]
+                } else {
+                    RTState = rememberRichTextState()
+                }
                 RichTextEditor(
                     modifier = Modifier.fillMaxSize(),
-                    state = noteRichTextStates[page],
+                    state = RTState
                 )
             }
         }
