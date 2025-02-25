@@ -24,20 +24,23 @@ import androidx.compose.ui.unit.sp
 import com.mohamedrejeb.richeditor.model.RichTextState
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
+import note.reader.controller.ProgramState
 
 @Composable
-fun NoteEditor(documentPage: Int, pageCount: Int,) {
+fun NoteEditor(
+    ) {
 
-    val notes by remember { mutableStateOf(listOf("Test 1", " Test 2")) }
-    val noteRichtextStates = remember { mutableStateListOf<RichTextState>() }
+    println("pageCount: ${ProgramState.currentPageCount}")
+    var notes by remember { mutableStateOf(List(ProgramState.currentPageCount) { "" }) }
+    println("notes: $notes")
 
-    if (noteRichtextStates.isEmpty()) {
-        for (note in notes) {
+    var noteRichTextStates = remember { mutableStateListOf<RichTextState>() }
+
+        while (noteRichTextStates.size < notes.size) {
             val state = rememberRichTextState()
-            state.setText(note)
-            noteRichtextStates += state
+            state.setText(notes[noteRichTextStates.size])
+            noteRichTextStates.add(rememberRichTextState())
         }
-    }
 
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -45,8 +48,9 @@ fun NoteEditor(documentPage: Int, pageCount: Int,) {
         pageCount = { notes.size }
     )
 
-    LaunchedEffect(documentPage) {
-        pagerState.animateScrollToPage(documentPage)
+    LaunchedEffect(ProgramState.currentPage) {
+        notes = List(ProgramState.currentPageCount) { "" }
+        pagerState.animateScrollToPage(ProgramState.currentPage)
     }
 
     Column {
@@ -57,7 +61,7 @@ fun NoteEditor(documentPage: Int, pageCount: Int,) {
             modifier = Modifier.fillMaxWidth().padding(8.dp)
         )
         Text(
-            text = "Page: ${documentPage + 1} / ${notes.size}",
+            text = "Page: ${ProgramState.currentPage + 1} / ${notes.size}",
             style = TextStyle(fontSize = 20.sp),
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth().padding(8.dp)
@@ -72,7 +76,7 @@ fun NoteEditor(documentPage: Int, pageCount: Int,) {
             ) { page ->
                 RichTextEditor(
                     modifier = Modifier.fillMaxSize(),
-                    state = noteRichtextStates[page],
+                    state = noteRichTextStates[page],
                 )
             }
         }

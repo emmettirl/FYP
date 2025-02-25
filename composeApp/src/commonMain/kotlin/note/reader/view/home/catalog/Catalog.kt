@@ -10,6 +10,7 @@ import androidx.compose.ui.text.style.TextAlign
 import note.reader.controller.FileSystemController
 import note.reader.controller.ProgramState
 import note.reader.model.enums.DocumentFormats
+import note.reader.model.enums.Layouts
 
 @Composable
 fun Catalog(modifier: Modifier) {
@@ -19,6 +20,7 @@ fun Catalog(modifier: Modifier) {
         val bgColor = if (!supportedDocType) {Color.Red} else {Color.Gray}
         val clickAction: () -> Unit = if (supportedDocType) {{
                 ProgramState.currentDocument = FileSystemController.document_map[key]!!
+                ProgramState.currentLayout = Layouts.READER
                 println("Key: $key\nProgramState: $ProgramState")
             }} else {{
                 println("Unsupported file type") }

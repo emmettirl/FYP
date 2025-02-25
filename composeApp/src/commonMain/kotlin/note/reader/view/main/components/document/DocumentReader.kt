@@ -21,15 +21,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.zt64.compose.pdf.component.PdfPage
 import dev.zt64.compose.pdf.rememberLocalPdfState
+import note.reader.controller.ProgramState
 import java.io.File
 
 @Composable
 fun DocumentReader(
-    currentPage: Int,
-    onPageChange: (Int) -> Unit,
-    onPageCountChange: (Int) -> Unit
+    currentPage: Int = ProgramState.currentPage,
+    onPageChange: (Int) -> Unit = { newPage -> ProgramState.currentPage = newPage },
+    onPageCountChange: (Int) -> Unit = {pageCount -> ProgramState.currentPageCount = pageCount}
     ) {
-    val pdfState = rememberLocalPdfState(File("D:\\Documents\\code\\FYP\\SampleFiles\\sample1.pdf"))
+    val pdfState = rememberLocalPdfState(File(ProgramState.currentDocument.path))
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { pdfState.pageCount })
 
     LaunchedEffect(pagerState) {

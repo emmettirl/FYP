@@ -30,6 +30,21 @@ object ProgramState {
             _currentDocumentFormat.value = value
         }
 
+    private val _currentPage: MutableState<Int> = mutableStateOf(0)
+    var currentPage: Int
+        get() = _currentPage.value
+        set(value) {
+            _currentPage.value = value
+        }
+
+    private val _currentPageCount: MutableState<Int> = mutableStateOf(0)
+    var currentPageCount: Int
+        get() = _currentPageCount.value
+        set(value) {
+            _currentPageCount.value = value
+            println("pagecountChanged: $value")
+        }
+
     override fun toString(): String {
         return "ProgramState(currentLayout=$_currentLayout, currentDocument=$_currentDocument, currentDocumentFormat=$_currentDocumentFormat)"
     }
