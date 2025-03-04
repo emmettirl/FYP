@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import note.reader.controller.ProgramState
+import note.reader.controller.ProgramStateSingleton
 import note.reader.model.enums.Layouts
 import note.reader.view.helper_functions.titleCase
 import java.lang.reflect.Constructor
@@ -58,19 +59,19 @@ val menuButtonLambdaMap: Map<MenuButtonEnum, MenuButtonData> = mapOf(
     MenuButtonEnum.HOME to MenuButtonData(
         // Content of the button, this is a composable function for the text
         content = {
-            if (ProgramState.currentLayout == Layouts.READER) {
+            if (ProgramStateSingleton.instance.currentLayout == Layouts.READER) {
                 Text("To ${titleCase(Layouts.HOME.toString())}")
-            } else if (ProgramState.currentLayout == Layouts.HOME) {
+            } else if (ProgramStateSingleton.instance.currentLayout == Layouts.HOME) {
                 Text("To ${titleCase(Layouts.READER.toString())}")
             }
         },
 
         // onClick functionality
         onClick = {
-            if (ProgramState.currentLayout == Layouts.READER) {
-                ProgramState.currentLayout = Layouts.HOME
-            } else if (ProgramState.currentLayout == Layouts.HOME) {
-                ProgramState.currentLayout = Layouts.READER
+            if (ProgramStateSingleton.instance.currentLayout == Layouts.READER) {
+                ProgramStateSingleton.instance.currentLayout = Layouts.HOME
+            } else if (ProgramStateSingleton.instance.currentLayout == Layouts.HOME) {
+                ProgramStateSingleton.instance.currentLayout = Layouts.READER
             }
         }
     )

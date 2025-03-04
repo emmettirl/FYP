@@ -1,4 +1,4 @@
-package note.reader.view.main
+package note.reader.view.reader
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import note.reader.controller.ProgramState
-import note.reader.view.main.components.TwoPaneView
+import note.reader.controller.ProgramStateSingleton
+import note.reader.view.reader.components.TwoPaneView
 import note.reader.view.components.menuBar.MenuBar
 import note.reader.view.helper_functions.titleCase
 
@@ -17,7 +17,7 @@ import note.reader.view.helper_functions.titleCase
 @Composable
 fun ReaderLayout() {
     Column(modifier = Modifier.fillMaxSize()) {
-        MenuBar(title = titleCase(ProgramState.currentLayout.toString()))
+        MenuBar(title = titleCase(ProgramStateSingleton.instance.currentLayout.toString()))
         Box(
             modifier = Modifier
                 .weight(1f)

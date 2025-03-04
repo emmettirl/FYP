@@ -1,4 +1,4 @@
-package note.reader.view.main.components
+package note.reader.view.reader.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -8,8 +8,8 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import note.reader.view.main.components.document.DocumentReader
-import note.reader.view.main.components.notes.NoteEditor
+import note.reader.view.reader.components.document.DocumentReader
+import note.reader.view.reader.components.notes.NoteEditor
 
 @Composable
 fun TwoPaneView() {

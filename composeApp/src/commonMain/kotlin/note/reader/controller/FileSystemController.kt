@@ -1,5 +1,6 @@
 package note.reader.controller
 
+import kotlinx.serialization.KSerializer
 import note.reader.model.Document
 import java.io.File
 import kotlinx.serialization.json.*
@@ -8,10 +9,10 @@ import kotlinx.serialization.serializer
 object FileSystemController {
     val appDataFolder = System.getenv("APPDATA")
     val documents_folder = "$appDataFolder\\NoteReader"
-
     val document_map_filename = "document_map.json"
-    val document_map_filepath = "$documents_folder\\$document_map_filename"
     var document_map = mutableMapOf<String, Document>()
+
+    val mapSerializer: KSerializer<MutableMap<String, Document>> = serializer()
 
     fun makeDocumentMap(path: String)  {
         val dir = File(path)
@@ -63,18 +64,20 @@ object FileSystemController {
 
     //serialize document_map to json
     fun saveDocumentMap() {
-        val json = Json.encodeToString(serializer(), document_map)
+        val document_map_filepath = documents_folder + "\\" + document_map_filename
+
+        val json = Json.encodeToString(mapSerializer, document_map)
         File(document_map_filepath).writeText(json)
-        println("saved document_map")
     }
 
     //deserialize document_map from json
     fun loadDocumentMap() {
+        val document_map_filepath = documents_folder + "\\" + document_map_filename
+
         if (!File(document_map_filepath).exists()) { return }
         val json = File(document_map_filepath).readText()
 
         document_map = Json.decodeFromString(json)
-        println("loaded document_map")
     }
 
     fun refreshDocumentMap() {
