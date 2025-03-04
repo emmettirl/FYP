@@ -12,14 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,50 +27,62 @@ import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
 import note.reader.controller.NoteController
 import note.reader.controller.ProgramStateSingleton
 import note.reader.model.Note
+import note.reader.model.NoteState
 
 @Composable
 fun NoteEditor(
     ) {
+
+    var initialized by remember { mutableStateOf( false) }
+    var ready by remember { mutableStateOf(false) }
+
     val noteController = NoteController(ProgramStateSingleton.instance.currentDocument)
+    var noteStates: List<NoteState> by remember { mutableStateOf(listOf()) }
 
 
-    var notes by remember { mutableStateOf(listOf<Note>()) }
-    val noteRichTextStates = remember { mutableStateListOf<RichTextState>() }
-
-        while (noteRichTextStates.size.coerceAtLeast(1) < notes.size) {
-            val state = rememberRichTextState()
-            state.setText(notes[noteRichTextStates.size].content)
-            noteRichTextStates.add(state)
-        }
-
-    SideEffect() {
-        //ToDo - Load notes from file
-        var loadedNotes = noteController.loadDocumentNotes()
-
-
-        notes = List(ProgramStateSingleton.instance.currentPageCount) {
-            Note(
+    while (noteStates.size.coerceAtLeast(1) < ProgramStateSingleton.instance.currentPageCount) {
+        val state = rememberRichTextState()
+        noteStates+= NoteState(
+            note = Note(
                 note_id = ProgramStateSingleton.instance.incCurrentIdIndex(),
                 source_name = ProgramStateSingleton.instance.currentDocument.title,
-                source_page = it,
+                source_page = noteStates.size,
                 content = ""
-            )
+            ),
+            noteRichTextState = state
+        )
+        if(noteStates.size == ProgramStateSingleton.instance.currentPageCount) {
+            initialized = true
         }
     }
 
-    for (state in noteRichTextStates) {
-        LaunchedEffect(state.toMarkdown()){
-            notes[noteRichTextStates.indexOf(state)].content = state.toMarkdown()
-            noteController.saveNote(notes[noteRichTextStates.indexOf(state)])
-            println(state.toMarkdown())
+    SideEffect() {
+
+        var loadedNotes = noteController.loadDocumentNotes()
+
+        if (initialized && !ready) {
+            for (note in loadedNotes) {
+                noteStates[note.source_page].note = note
+                noteStates[note.source_page].noteRichTextState.setText(note.content)
+            }
+            ready = true
         }
+
     }
 
+    if (initialized && ready) {
+        for (noteState in noteStates) {
+            LaunchedEffect(noteState.noteRichTextState.toMarkdown()){
+                noteState.note.content = noteState.noteRichTextState.toMarkdown()
+                noteController.saveNote(noteState.note)
+            }
+        }
+    }
 
     val pagerState = rememberPagerState(
         initialPage = 0,
         initialPageOffsetFraction = 0F,
-        pageCount = { notes.size }
+        pageCount = { noteStates.size }
     )
 
     LaunchedEffect(ProgramStateSingleton.instance.currentPage) {
@@ -87,7 +97,7 @@ fun NoteEditor(
             modifier = Modifier.fillMaxWidth().padding(8.dp)
         )
         Text(
-            text = "Page: ${ProgramStateSingleton.instance.currentPage + 1} / ${notes.size}",
+            text = "Page: ${ProgramStateSingleton.instance.currentPage + 1} / ${noteStates.size}",
             style = TextStyle(fontSize = 20.sp),
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth().padding(8.dp)
@@ -102,15 +112,26 @@ fun NoteEditor(
             ) { page ->
                 // Ensure that a rich text state exists for compose, which will be overwritten by current state when loaded
                 val RTState: RichTextState
-                if (noteRichTextStates.size > 0) {
-                    RTState = noteRichTextStates[page]
+                if (noteStates.size > 0) {
+                    RTState = noteStates[page].noteRichTextState
                 } else {
                     RTState = rememberRichTextState()
+                    noteStates += NoteState(
+                        note = Note(
+                            note_id = ProgramStateSingleton.instance.incCurrentIdIndex(),
+                            source_name = ProgramStateSingleton.instance.currentDocument.title,
+                            source_page = page,
+                            content = ""
+                        ),
+                        noteRichTextState = RTState
+                    )
                 }
                 RichTextEditor(
                     modifier = Modifier.fillMaxSize(),
                     state = RTState
-                ) }
+                )
+            }
         }
     }
 }
+

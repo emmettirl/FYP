@@ -50,13 +50,13 @@ class NoteController (
         // update note in file
     }
 
-    fun loadDocumentNotes(): MutableList<Note> {
-        var loaded_notes: MutableList<Note> = mutableListOf()
+    fun loadDocumentNotes(): List<Note> {
+        var loaded_notes: ArrayList<Note> = ArrayList()
 
         for (i in 0 until ProgramStateSingleton.instance.currentPageCount) {
             val loaded_note = loadNote(ProgramStateSingleton.instance.currentDocument, i)
             if (loaded_note != null) {
-                loaded_notes.add(loaded_note)
+                loaded_notes += loaded_note
             }
         }
         return loaded_notes
