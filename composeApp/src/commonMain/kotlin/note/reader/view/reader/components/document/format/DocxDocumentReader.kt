@@ -14,9 +14,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.apache.poi.hwpf.HWPFDocument
-import org.apache.poi.hwpf.usermodel.Picture
-import org.apache.poi.hwpf.usermodel.Range
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 import java.io.FileInputStream
 import java.io.InputStream
@@ -30,53 +27,57 @@ fun DocxDocumentReader(
     onPageChange: (Int) -> Unit,
     onPageCountChange: (Int) -> Unit
 ) {
-    val fileExtension = documentPath.substringAfterLast('.')
-    val paragraphs: List<String>
-    val images: List<BufferedImage>
+//    val fileExtension = documentPath.substringAfterLast('.')
+//    val paragraphs: List<String>
+//    val images: List<BufferedImage>
+//
+//    if (fileExtension.equals("docx", ignoreCase = true)) {
+//        val document = XWPFDocument(FileInputStream(documentPath))
+//        paragraphs = document.paragraphs.map { it.text }
+//        images = document.allPictures.map { picture ->
+//            val imageStream: InputStream = picture.data.inputStream()
+//            ImageIO.read(imageStream)
+//        }
+//    } else if (fileExtension.equals("doc", ignoreCase = true)) {
+//        val document = HWPFDocument(FileInputStream(documentPath))
+//        val range: Range = document.range
+//        paragraphs = (0 until range.numParagraphs()).map { range.getParagraph(it).text() }
+//        images = document.picturesTable.allPictures.map { picture ->
+//            val imageStream: InputStream = picture.content.inputStream()
+//            ImageIO.read(imageStream)
+//        }
+//    } else {
+//        throw IllegalArgumentException("Unsupported file format: $fileExtension")
+//    }
+//
+//    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+//        Text(
+//            text = "Document Reader",
+//            style = TextStyle(fontSize = 20.sp),
+//            textAlign = TextAlign.Center,
+//            modifier = Modifier.fillMaxWidth().padding(8.dp)
+//        )
+//        paragraphs.forEach { paragraph ->
+//            Text(
+//                text = paragraph,
+//                style = TextStyle(fontSize = 16.sp),
+//                textAlign = TextAlign.Start,
+//                modifier = Modifier.fillMaxWidth().padding(8.dp)
+//            )
+//        }
+//        images.forEach { bufferedImage ->
+//            val imageBitmap = bufferedImage.toComposeImageBitmap()
+//            Image(
+//                bitmap = imageBitmap,
+//                contentDescription = null,
+//                modifier = Modifier.fillMaxWidth().padding(8.dp)
+//            )
+//        }
+//    }
 
-    if (fileExtension.equals("docx", ignoreCase = true)) {
-        val document = XWPFDocument(FileInputStream(documentPath))
-        paragraphs = document.paragraphs.map { it.text }
-        images = document.allPictures.map { picture ->
-            val imageStream: InputStream = picture.data.inputStream()
-            ImageIO.read(imageStream)
-        }
-    } else if (fileExtension.equals("doc", ignoreCase = true)) {
-        val document = HWPFDocument(FileInputStream(documentPath))
-        val range: Range = document.range
-        paragraphs = (0 until range.numParagraphs()).map { range.getParagraph(it).text() }
-        images = document.picturesTable.allPictures.map { picture ->
-            val imageStream: InputStream = picture.content.inputStream()
-            ImageIO.read(imageStream)
-        }
-    } else {
-        throw IllegalArgumentException("Unsupported file format: $fileExtension")
-    }
+    convertDocxToPdf(documentPath, "temp.pdf")
+    PdfDocumentReader("temp.pdf", currentPage, onPageChange, onPageCountChange)
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        Text(
-            text = "Document Reader",
-            style = TextStyle(fontSize = 20.sp),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
-        )
-        paragraphs.forEach { paragraph ->
-            Text(
-                text = paragraph,
-                style = TextStyle(fontSize = 16.sp),
-                textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
-            )
-        }
-        images.forEach { bufferedImage ->
-            val imageBitmap = bufferedImage.toComposeImageBitmap()
-            Image(
-                bitmap = imageBitmap,
-                contentDescription = null,
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
-            )
-        }
-    }
 }
 
 fun BufferedImage.toComposeImageBitmap(): ImageBitmap {
@@ -89,3 +90,4 @@ fun BufferedImage.toComposeImageBitmap(): ImageBitmap {
     // imageBitmap.setPixels(pixels)
     return imageBitmap
 }
+

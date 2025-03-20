@@ -10,6 +10,12 @@ plugins {
     kotlin("plugin.serialization") version "2.1.10"
 }
 
+repositories {
+    mavenCentral()
+    google()
+    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+}
+
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -42,9 +48,8 @@ kotlin {
             implementation(libs.richeditor.compose)
             implementation(libs.poi.ooxml)
             implementation(libs.androidx.webkit)
-            implementation("org.apache.poi:poi:5.2.3")
-            implementation("org.apache.poi:poi-ooxml:5.2.3")
-            implementation("org.apache.poi:poi-scratchpad:5.2.3")
+            implementation("org.docx4j:docx4j-JAXB-MOXy:11.5.2")
+            implementation("org.docx4j:docx4j-export-fo:11.5.2")
         }
 
 

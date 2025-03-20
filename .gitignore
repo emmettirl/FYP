@@ -156,3 +156,4 @@ google-services.json
 # Android Profiling
 *.hprof
 /SampleFiles/
+/composeApp/temp.pdf
