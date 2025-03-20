@@ -42,7 +42,10 @@ kotlin {
             implementation(libs.richeditor.compose)
             implementation(libs.poi.ooxml)
             implementation(libs.androidx.webkit)
-            }
+            implementation("org.apache.poi:poi:5.2.3")
+            implementation("org.apache.poi:poi-ooxml:5.2.3")
+            implementation("org.apache.poi:poi-scratchpad:5.2.3")
+        }
 
 
         desktopMain.dependencies {
