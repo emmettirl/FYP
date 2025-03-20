@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import note.reader.controller.ProgramStateSingleton
 import note.reader.model.enums.DocumentFormats
+import note.reader.view.reader.components.document.format.DocxDocumentReader
 import note.reader.view.reader.components.document.format.PdfDocumentReader
 
 @Composable
@@ -46,7 +47,12 @@ fun DocumentReader(
                     )
                 }
                 "docx", "doc" -> {
-                    // DocxDocumentReader()
+                     DocxDocumentReader(
+                         documentPath = ProgramStateSingleton.instance.currentDocument.path,
+                         currentPage = currentPage,
+                         onPageChange = onPageChange,
+                         onPageCountChange = onPageCountChange
+                     )
                 }
 
                 else -> {
