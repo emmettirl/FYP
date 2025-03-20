@@ -22,7 +22,7 @@ kotlin {
     
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -41,7 +41,10 @@ kotlin {
             implementation(libs.compose.pdf)
             implementation(libs.richeditor.compose)
             implementation(libs.poi.ooxml)
-        }
+            implementation(libs.androidx.webkit)
+            }
+
+
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
@@ -83,6 +86,7 @@ dependencies {
     implementation(libs.mediation.test.suite)
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.ui.unit.android)
+    implementation(libs.androidx.core)
     debugImplementation(compose.uiTooling)
 }
 
