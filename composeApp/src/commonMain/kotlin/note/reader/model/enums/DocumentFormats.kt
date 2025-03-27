@@ -5,4 +5,5 @@ enum class DocumentFormats {
     DOCX,
     DOC,
     PPTX,
+    EPUB,
 }

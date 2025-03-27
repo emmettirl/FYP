@@ -1,4 +1,4 @@
-package note.reader.view.reader.components.document.format
+package note.reader.controller.conversion
 
 import org.docx4j.Docx4J
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage
@@ -23,6 +23,13 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument
 object DocumentConverter {
 
     private val tempDir = File(System.getProperty("java.io.tmpdir"), "note_reader_temp").apply { mkdirs() }
+
+    fun convertEpubToPdf(epubPath: String, pdfPath: String): String {
+        val tempPdfPath = File(tempDir, pdfPath).absolutePath
+
+        CalibreDriver.convertEpubToPdf(epubPath, tempPdfPath)
+        return tempPdfPath
+    }
 
 
     fun convertDocToDocx(docFile: File, docxFileName: String): File {
@@ -112,7 +119,6 @@ object DocumentConverter {
             println("Conversion Completed: $tempPdfPath")
         }
         return tempPdfPath
-
     }
 
     fun renderSlideToImage(slide: org.apache.poi.xslf.usermodel.XSLFSlide, slideSize: Dimension): BufferedImage {

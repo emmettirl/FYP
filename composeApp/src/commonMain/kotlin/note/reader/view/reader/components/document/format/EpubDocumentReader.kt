@@ -5,12 +5,12 @@ import note.reader.controller.conversion.DocumentConverter
 
 
 @Composable
-fun PptxDocumentReader(
+fun EpubDocumentReader(
     documentPath: String,
     currentPage: Int,
     onPageChange: (Int) -> Unit,
     onPageCountChange: (Int) -> Unit
 ) {
-    val path = DocumentConverter.convertPptxToPdf(documentPath, "temp.pdf")
-    PdfDocumentReader(path, currentPage, onPageChange, onPageCountChange)
+    val pdfPath = DocumentConverter.convertEpubToPdf(documentPath, "temp.pdf")
+    PdfDocumentReader(pdfPath, currentPage, onPageChange, onPageCountChange)
 }

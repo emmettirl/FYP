@@ -28,6 +28,9 @@ object FileSystemController {
             val files = dir.listFiles()
             if (files != null) {
                 for (file in File(path).listFiles()!!) {
+                    if (file.extension == "json" || file.extension == "bak") {
+                        continue
+                    }
                     // if file is not a directory and not the document_map file
                     if (!file.isDirectory && file.name != document_map_filename) {
 

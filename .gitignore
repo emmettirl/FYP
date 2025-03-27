@@ -157,3 +157,4 @@ google-services.json
 *.hprof
 /SampleFiles/
 /composeApp/temp.pdf
+/composeApp/resources/Calibre Portable/
