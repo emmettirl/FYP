@@ -4,13 +4,13 @@ import androidx.compose.runtime.Composable
 
 
 @Composable
-fun DocxDocumentReader(
+fun PptxDocumentReader(
     documentPath: String,
     currentPage: Int,
     onPageChange: (Int) -> Unit,
     onPageCountChange: (Int) -> Unit
 ) {
 
-    val path = DocumentConverter.convertDocxToPdf(documentPath, "temp.pdf")
+    val path = DocumentConverter.convertPptxToPdf(documentPath, "temp.pdf")
     PdfDocumentReader(path, currentPage, onPageChange, onPageCountChange)
 }

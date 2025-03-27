@@ -48,8 +48,12 @@ kotlin {
             implementation(libs.richeditor.compose)
             implementation(libs.poi.ooxml)
             implementation(libs.androidx.webkit)
-            implementation("org.docx4j:docx4j-JAXB-MOXy:11.5.2")
-            implementation("org.docx4j:docx4j-export-fo:11.5.2")
+            implementation(libs.docx4j.jaxb.moxy)
+            implementation(libs.docx4j.export.fo.v1152)
+
+            implementation(libs.poi.ooxml.v523)
+            implementation(libs.pdfbox)
+            implementation(libs.commons.io)
         }
 
 

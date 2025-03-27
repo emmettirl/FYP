@@ -14,6 +14,7 @@ import note.reader.controller.ProgramStateSingleton
 import note.reader.model.enums.DocumentFormats
 import note.reader.view.reader.components.document.format.DocxDocumentReader
 import note.reader.view.reader.components.document.format.PdfDocumentReader
+import note.reader.view.reader.components.document.format.PptxDocumentReader
 
 @Composable
 fun DocumentReader(
@@ -46,8 +47,17 @@ fun DocumentReader(
                         onPageCountChange = onPageCountChange
                     )
                 }
-                "docx", "doc" -> {
+                "docx" -> {
                      DocxDocumentReader(
+                         documentPath = ProgramStateSingleton.instance.currentDocument.path,
+                         currentPage = currentPage,
+                         onPageChange = onPageChange,
+                         onPageCountChange = onPageCountChange
+                     )
+                }
+
+                "pptx" -> {
+                     PptxDocumentReader(
                          documentPath = ProgramStateSingleton.instance.currentDocument.path,
                          currentPage = currentPage,
                          onPageChange = onPageChange,
