@@ -47,7 +47,7 @@ fun DocumentReader(
                         onPageCountChange = onPageCountChange
                     )
                 }
-                "docx" -> {
+                "docx", "doc" -> {
                      DocxDocumentReader(
                          documentPath = ProgramStateSingleton.instance.currentDocument.path,
                          currentPage = currentPage,

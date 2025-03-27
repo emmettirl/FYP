@@ -13,10 +13,45 @@ import org.apache.poi.xslf.usermodel.XMLSlideShow
 import java.awt.*
 import java.awt.image.BufferedImage
 import java.io.FileInputStream
+import java.io.IOException
+
+import org.apache.poi.hwpf.HWPFDocument
+import org.apache.poi.hwpf.extractor.WordExtractor
+import org.apache.poi.xwpf.usermodel.XWPFDocument
+
 
 object DocumentConverter {
 
     private val tempDir = File(System.getProperty("java.io.tmpdir"), "note_reader_temp").apply { mkdirs() }
+
+
+    fun convertDocToDocx(docFile: File, docxFileName: String): File {
+        val docxFile = File(tempDir, docxFileName)
+        try {
+            val docInputStream = FileInputStream(docFile)
+            val hwpf = HWPFDocument(docInputStream)
+            val extractor = WordExtractor(hwpf)
+            val docText = extractor.text
+
+            val docx = XWPFDocument()
+
+            val paragraph = docx.createParagraph()
+            paragraph.createRun().setText(docText)
+
+            val docxOutputStream = FileOutputStream(docxFile)
+            docx.write(docxOutputStream)
+
+            docInputStream.close()
+            docxOutputStream.close()
+
+            println("Conversion successful: ${docFile.name} -> ${docxFile.name}")
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return docxFile
+    }
+
 
     fun convertDocxToPdf(docxPath: String, pdfPath: String): String {
         val wordMLPackage: WordprocessingMLPackage = WordprocessingMLPackage.load(File(docxPath))

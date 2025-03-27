@@ -46,12 +46,13 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.compose.pdf)
             implementation(libs.richeditor.compose)
-            implementation(libs.poi.ooxml)
             implementation(libs.androidx.webkit)
             implementation(libs.docx4j.jaxb.moxy)
             implementation(libs.docx4j.export.fo.v1152)
 
-            implementation(libs.poi.ooxml.v523)
+            implementation("org.apache.poi:poi:5.2.3")
+            implementation("org.apache.poi:poi-ooxml:5.2.3")
+            implementation("org.apache.poi:poi-scratchpad:5.2.3")
             implementation(libs.pdfbox)
             implementation(libs.commons.io)
         }

@@ -1,6 +1,7 @@
 package note.reader.view.reader.components.document.format
 
 import androidx.compose.runtime.Composable
+import java.io.File
 
 
 @Composable
@@ -10,7 +11,13 @@ fun DocxDocumentReader(
     onPageChange: (Int) -> Unit,
     onPageCountChange: (Int) -> Unit
 ) {
+    val docxPath = if (documentPath.endsWith(".doc")) {
+        val docFile = File(documentPath)
+        DocumentConverter.convertDocToDocx(docFile, "temp.docx").absolutePath
+    } else {
+        documentPath
+    }
 
-    val path = DocumentConverter.convertDocxToPdf(documentPath, "temp.pdf")
+    val path = DocumentConverter.convertDocxToPdf(docxPath, "temp.pdf")
     PdfDocumentReader(path, currentPage, onPageChange, onPageCountChange)
 }
