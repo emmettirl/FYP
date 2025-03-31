@@ -10,7 +10,6 @@ object CalibreDriver {
 
         var path = File(calibrePath, executable).absolutePath
 
-
         return path
     }
 
