@@ -27,6 +27,13 @@ object DocumentConverter {
         return tempPdfPath
     }
 
+    fun convertHtmlToPdf(htmlPath: String): String {
+
+        val tempPdfPath = LibreOfficeDriver.convertHtmlToPdf(htmlPath, tempDir)
+
+        return tempPdfPath.absolutePath
+    }
+
 
     fun convertDoctoDocx(docPath: String, temp_dir: File = File(tempDir, "docx").apply { mkdirs() }): String {
 

@@ -63,4 +63,50 @@ object LibreOfficeDriver {
 
     }
 
+    fun convertHtmlToPdf(docPath: String, temp_dir: File): File {
+        val libreOfficePath = getLibreOfficePath()
+        val libreOfficeFile = File(libreOfficePath)
+        val tempPdfFile = File(temp_dir, File(docPath).nameWithoutExtension + ".pdf")
+
+        if (tempPdfFile.exists()) {
+            println("PDF file already exists: ${tempPdfFile.absolutePath}")
+            return tempPdfFile
+        }
+        if (!libreOfficeFile.exists()) {
+            throw RuntimeException("LibreOffice executable not found at: $libreOfficePath")
+        }
+
+        val command = listOf(
+            libreOfficePath,
+            "--headless",
+            "--convert-to", "pdf",
+            docPath,
+            "--outdir", temp_dir.absolutePath
+        )
+        println("Executing command: ${command.joinToString(" ")}")
+
+        val process = ProcessBuilder(
+            command
+        ).start()
+        process.waitFor()
+
+        val output = process.inputStream.bufferedReader().use { it.readText() }
+        val errorOutput = process.errorStream.bufferedReader().use { it.readText() }
+        println("Process output: $output")
+        val exitValue = process.waitFor()
+
+        if (exitValue != 0) {
+            throw RuntimeException("LibreOffice conversion failed with exit code $exitValue")
+        }
+
+        if (!tempPdfFile.exists() || tempPdfFile.length() == 0L) {
+            throw RuntimeException("Conversion failed, output file is empty")
+        }
+
+        println("PDF file created at: ${tempPdfFile.absolutePath}")
+
+        return tempPdfFile
+
+    }
+
 }

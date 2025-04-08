@@ -15,6 +15,7 @@ import note.reader.controller.conversion.CalibreDriver
 import note.reader.model.enums.DocumentFormats
 import note.reader.view.reader.components.document.format.DocxDocumentReader
 import note.reader.view.reader.components.document.format.EpubDocumentReader
+import note.reader.view.reader.components.document.format.HtmlDocumentReader
 import note.reader.view.reader.components.document.format.PdfDocumentReader
 import note.reader.view.reader.components.document.format.PptxDocumentReader
 
@@ -69,6 +70,15 @@ fun DocumentReader(
 
                 "epub" -> {
                     EpubDocumentReader(
+                        documentPath = ProgramStateSingleton.instance.currentDocument.path,
+                        currentPage = currentPage,
+                        onPageChange = onPageChange,
+                        onPageCountChange = onPageCountChange
+                    )
+                }
+
+                "html" -> {
+                    HtmlDocumentReader(
                         documentPath = ProgramStateSingleton.instance.currentDocument.path,
                         currentPage = currentPage,
                         onPageChange = onPageChange,
