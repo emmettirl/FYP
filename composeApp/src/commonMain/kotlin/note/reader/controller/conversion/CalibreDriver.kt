@@ -14,15 +14,10 @@ object CalibreDriver {
     }
 
 
-    fun convertEpubToPdf(epubPath: String, tempPdfPath: String):File {
+    fun convertEpubToPdf(epubPath: String, tempPdfPath: String): String {
         val calibrePath = getCalibrePath()
         val process = ProcessBuilder(calibrePath, epubPath, tempPdfPath).start()
         process.waitFor()
-        return File(tempPdfPath)
+        return File(tempPdfPath).absolutePath
     }
-}
-
-fun main() {
-    CalibreDriver.getCalibrePath()
-    print("Hello")
 }
