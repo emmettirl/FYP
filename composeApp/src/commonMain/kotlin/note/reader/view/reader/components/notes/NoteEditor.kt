@@ -1,12 +1,17 @@
 package note.reader.view.reader.components.notes
 
+import HtmlScreen
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -30,108 +36,126 @@ import note.reader.model.Note
 import note.reader.model.NoteState
 
 @Composable
-fun NoteEditor(
-    ) {
+fun NoteEditor() {
+    var currentScreen by remember { mutableStateOf("NoteEditor") }
+    var markdownContent by remember { mutableStateOf("") }
 
-    var initialized by remember { mutableStateOf( false) }
-    var ready by remember { mutableStateOf(false) }
+    if (currentScreen == "NoteEditor") {
+        var initialized by remember { mutableStateOf(false) }
+        var ready by remember { mutableStateOf(false) }
 
-    val noteController = NoteController(ProgramStateSingleton.instance.currentDocument)
-    var noteStates: List<NoteState> by remember { mutableStateOf(listOf()) }
+        val noteController = NoteController(ProgramStateSingleton.instance.currentDocument)
+        var noteStates: List<NoteState> by remember { mutableStateOf(listOf()) }
 
-
-    while (noteStates.size.coerceAtLeast(1) < ProgramStateSingleton.instance.currentPageCount) {
-        val state = rememberRichTextState()
-        noteStates+= NoteState(
-            note = Note(
-                note_id = ProgramStateSingleton.instance.incCurrentIdIndex(),
-                source_name = ProgramStateSingleton.instance.currentDocument.title,
-                source_page = noteStates.size,
-                content = ""
-            ),
-            noteRichTextState = state
-        )
-        if(noteStates.size == ProgramStateSingleton.instance.currentPageCount) {
-            initialized = true
-        }
-    }
-
-    SideEffect() {
-
-        var loadedNotes = noteController.loadDocumentNotes()
-
-        if (initialized && !ready) {
-            for (note in loadedNotes) {
-                noteStates[note.source_page].note = note
-                noteStates[note.source_page].noteRichTextState.setText(note.content)
-            }
-            ready = true
-        }
-
-    }
-
-    if (initialized && ready) {
-        for (noteState in noteStates) {
-            LaunchedEffect(noteState.noteRichTextState.toMarkdown()){
-                noteState.note.content = noteState.noteRichTextState.toMarkdown()
-                noteController.saveNote(noteState.note)
+        while (noteStates.size.coerceAtLeast(1) < ProgramStateSingleton.instance.currentPageCount) {
+            val state = rememberRichTextState()
+            noteStates += NoteState(
+                note = Note(
+                    note_id = ProgramStateSingleton.instance.incCurrentIdIndex(),
+                    source_name = ProgramStateSingleton.instance.currentDocument.title,
+                    source_page = noteStates.size,
+                    content = ""
+                ),
+                noteRichTextState = state
+            )
+            if (noteStates.size == ProgramStateSingleton.instance.currentPageCount) {
+                initialized = true
             }
         }
-    }
 
-    val pagerState = rememberPagerState(
-        initialPage = 0,
-        initialPageOffsetFraction = 0F,
-        pageCount = { noteStates.size }
-    )
+        SideEffect {
+            val loadedNotes = noteController.loadDocumentNotes()
 
-    LaunchedEffect(ProgramStateSingleton.instance.currentPage) {
-        pagerState.animateScrollToPage(ProgramStateSingleton.instance.currentPage)
-    }
+            if (initialized && !ready) {
+                for (note in loadedNotes) {
+                    noteStates[note.source_page].note = note
+                    noteStates[note.source_page].noteRichTextState.setText(note.content)
+                }
+                ready = true
+            }
+        }
 
-    Column {
-        Text(
-            text = "Notes Editor",
-            style = TextStyle(fontSize = 20.sp),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
+        if (initialized && ready) {
+            for (noteState in noteStates) {
+                LaunchedEffect(noteState.noteRichTextState.toMarkdown()) {
+                    noteState.note.content = noteState.noteRichTextState.toMarkdown()
+                    noteController.saveNote(noteState.note)
+                }
+            }
+        }
+
+        val pagerState = rememberPagerState(
+            initialPage = 0,
+            initialPageOffsetFraction = 0F,
+            pageCount = { noteStates.size }
         )
-        Text(
-            text = "Page: ${ProgramStateSingleton.instance.currentPage + 1} / ${noteStates.size}",
-            style = TextStyle(fontSize = 20.sp),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
-        )
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center,
-        ) {
-            VerticalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                // Ensure that a rich text state exists for compose, which will be overwritten by current state when loaded
-                val RTState: RichTextState
-                if (noteStates.size > 0) {
-                    RTState = noteStates[page].noteRichTextState
-                } else {
-                    RTState = rememberRichTextState()
-                    noteStates += NoteState(
-                        note = Note(
-                            note_id = ProgramStateSingleton.instance.incCurrentIdIndex(),
-                            source_name = ProgramStateSingleton.instance.currentDocument.title,
-                            source_page = page,
-                            content = ""
-                        ),
-                        noteRichTextState = RTState
+
+        LaunchedEffect(ProgramStateSingleton.instance.currentPage) {
+            pagerState.animateScrollToPage(ProgramStateSingleton.instance.currentPage)
+        }
+
+        Column {
+            Text(
+                text = "Notes Editor",
+                style = TextStyle(fontSize = 20.sp),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth().padding(8.dp)
+            )
+            Text(
+                text = "Page: ${ProgramStateSingleton.instance.currentPage + 1} / ${noteStates.size}",
+                style = TextStyle(fontSize = 20.sp),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth().padding(8.dp)
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = {
+                        markdownContent = noteStates.joinToString("\n") { it.noteRichTextState.toMarkdown() }
+                        currentScreen = "HtmlScreen"
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
+                ) {
+                    Text(text = "Render Markdown", color = Color.White)
+                }
+            }
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                VerticalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize()
+                ) { page ->
+                    val RTState: RichTextState
+                    if (noteStates.size > 0) {
+                        RTState = noteStates[page].noteRichTextState
+                    } else {
+                        RTState = rememberRichTextState()
+                        noteStates += NoteState(
+                            note = Note(
+                                note_id = ProgramStateSingleton.instance.incCurrentIdIndex(),
+                                source_name = ProgramStateSingleton.instance.currentDocument.title,
+                                source_page = page,
+                                content = ""
+                            ),
+                            noteRichTextState = RTState
+                        )
+                    }
+                    RichTextEditor(
+                        modifier = Modifier.fillMaxSize(),
+                        state = RTState
                     )
                 }
-                RichTextEditor(
-                    modifier = Modifier.fillMaxSize(),
-                    state = RTState
-                )
             }
         }
+    } else if (currentScreen == "HtmlScreen") {
+        HtmlScreen(
+            markdown = markdownContent,
+            onBack = { currentScreen = "NoteEditor" }
+        )
     }
 }
 
