@@ -16,11 +16,20 @@ data class ProgramStateData(
     val currentDocumentFormat: DocumentFormats,
     val currentPage: Int,
     val currentPageCount: Int,
-    val currentIdIndex: Int
+    val currentIdIndex: Int,
+    val isDarkTheme: Boolean
 )
 
 class ProgramState {
     val filePath = FileSystemController.documents_folder + "\\state.json"
+    private val _isDarkTheme: MutableState<Boolean> = mutableStateOf(false)
+    var isDarkTheme: Boolean
+        get() = _isDarkTheme.value
+        set(value) {
+            _isDarkTheme.value = value
+            saveState()
+        }
+
     private val _currentLayout: MutableState<Layouts> = mutableStateOf(Layouts.HOME)
 
     var currentLayout: Layouts
@@ -89,7 +98,8 @@ class ProgramState {
             currentDocumentFormat = currentDocumentFormat,
             currentPage = currentPage,
             currentPageCount = currentPageCount,
-            currentIdIndex = currentIdIndex
+            currentIdIndex = currentIdIndex,
+            isDarkTheme = _isDarkTheme.value
         )
         val json = Json.encodeToString(ProgramStateData.serializer(), stateData)
         File(filePath).writeText(json)
@@ -106,6 +116,7 @@ class ProgramState {
         _currentPage.value = stateData.currentPage
         _currentPageCount.value = stateData.currentPageCount
         _currentIdIndex.value = stateData.currentIdIndex
+        _isDarkTheme.value = stateData.isDarkTheme
     }
 
     init {

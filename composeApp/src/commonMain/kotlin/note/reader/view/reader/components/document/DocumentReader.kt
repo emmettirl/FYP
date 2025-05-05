@@ -11,7 +11,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import note.reader.controller.ProgramStateSingleton
-import note.reader.controller.conversion.CalibreDriver
 import note.reader.model.enums.DocumentFormats
 import note.reader.view.reader.components.document.format.DocxDocumentReader
 import note.reader.view.reader.components.document.format.EpubDocumentReader
@@ -38,14 +37,13 @@ fun DocumentReader(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth().padding(8.dp)
         )
-        var currentDocumentType =
+        val currentDocumentType =
             ProgramStateSingleton.instance.currentDocument.path.substringAfterLast(".").lowercase()
         if (currentDocumentType in DocumentFormats.entries.toString().lowercase()) {
             when (currentDocumentType) {
                 "pdf" -> {
                     PdfDocumentReader(
                         documentPath = ProgramStateSingleton.instance.currentDocument.path,
-                        currentPage = currentPage,
                         onPageChange = onPageChange,
                         onPageCountChange = onPageCountChange
                     )
@@ -53,7 +51,6 @@ fun DocumentReader(
                 "docx", "doc" -> {
                      DocxDocumentReader(
                          documentPath = ProgramStateSingleton.instance.currentDocument.path,
-                         currentPage = currentPage,
                          onPageChange = onPageChange,
                          onPageCountChange = onPageCountChange
                      )
@@ -62,7 +59,6 @@ fun DocumentReader(
                 "pptx" -> {
                      PptxDocumentReader(
                          documentPath = ProgramStateSingleton.instance.currentDocument.path,
-                         currentPage = currentPage,
                          onPageChange = onPageChange,
                          onPageCountChange = onPageCountChange
                      )
@@ -71,7 +67,6 @@ fun DocumentReader(
                 "epub" -> {
                     EpubDocumentReader(
                         documentPath = ProgramStateSingleton.instance.currentDocument.path,
-                        currentPage = currentPage,
                         onPageChange = onPageChange,
                         onPageCountChange = onPageCountChange
                     )
@@ -80,7 +75,6 @@ fun DocumentReader(
                 "html" -> {
                     HtmlDocumentReader(
                         documentPath = ProgramStateSingleton.instance.currentDocument.path,
-                        currentPage = currentPage,
                         onPageChange = onPageChange,
                         onPageCountChange = onPageCountChange
                     )

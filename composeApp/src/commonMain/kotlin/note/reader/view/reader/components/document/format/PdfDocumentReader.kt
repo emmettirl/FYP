@@ -10,9 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -33,13 +36,12 @@ import java.io.File
 @Composable
 fun PdfDocumentReader(
     documentPath: String,
-    currentPage: Int,
     onPageChange: (Int) -> Unit,
     onPageCountChange: (Int) -> Unit
 ) {
     val pdfState = rememberLocalPdfState(File(documentPath))
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { pdfState.pageCount })
-    var zoomLevel = remember { mutableStateOf(1f) }
+    val zoomLevel = remember { mutableStateOf(1f) }
     val coroutineScope = rememberCoroutineScope()
 
 
@@ -63,10 +65,10 @@ fun PdfDocumentReader(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(onClick = { zoomLevel.value = (zoomLevel.value - 0.1f).coerceAtLeast(0.5f) }) {
-                Text("Zoom Out", fontSize = 16.sp)
+                Text("+\uD83D\uDD0D", fontSize = 16.sp)
             }
             Button(onClick = { zoomLevel.value = (zoomLevel.value + 0.1f).coerceAtMost(3f) }) {
-                Text("Zoom In", fontSize = 16.sp)
+                Text("-\uD83D\uDD0D", fontSize = 16.sp)
             }
         }
 
@@ -98,7 +100,12 @@ fun PdfDocumentReader(
                     }
                 }
             }) {
-                Text("Previous Page", fontSize = 16.sp)
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Previous Page",
+                    modifier = Modifier.padding(end = 4.dp)
+                )
+                Text("  Previous Page", fontSize = 16.sp)
             }
             Button(onClick = {
                 coroutineScope.launch {
@@ -107,7 +114,12 @@ fun PdfDocumentReader(
                     }
                 }
             }) {
-                Text("Next Page", fontSize = 16.sp)
+                Text("Next Page  ", fontSize = 16.sp)
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = "Next Page",
+                    modifier = Modifier.padding(start = 4.dp)
+                )
             }
         }
     }

@@ -49,7 +49,11 @@ fun MenuBar(title: String) {
                 MenuButton(buttonModifier)
                 MenuButton(buttonModifier)
                 MenuButton(buttonModifier)
-                MenuButton(buttonModifier)
+                MenuButton(
+                    modifier = buttonModifier,
+                    onClick = menuButtonLambdaMap[MenuButtonEnum.THEME]!!.onClick,
+                    content = menuButtonLambdaMap[MenuButtonEnum.THEME]!!.content
+                )
 
             }
         }

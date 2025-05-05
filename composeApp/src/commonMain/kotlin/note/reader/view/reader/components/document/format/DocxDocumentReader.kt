@@ -9,7 +9,6 @@ import java.io.File
 @Composable
 fun DocxDocumentReader(
     documentPath: String,
-    currentPage: Int,
     onPageChange: (Int) -> Unit,
     onPageCountChange: (Int) -> Unit
 ) {
@@ -34,5 +33,5 @@ fun DocxDocumentReader(
 
     val path = DocumentConverter.convertDocxToPdf(docxPath, "temp.pdf")
 
-    PdfDocumentReader(path, currentPage, onPageChange, onPageCountChange)
+    PdfDocumentReader(path, onPageChange, onPageCountChange)
 }

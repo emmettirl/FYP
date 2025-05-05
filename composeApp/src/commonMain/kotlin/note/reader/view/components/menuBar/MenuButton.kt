@@ -6,12 +6,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import note.reader.controller.ProgramState
 import note.reader.controller.ProgramStateSingleton
 import note.reader.model.enums.Layouts
 import note.reader.view.helper_functions.titleCase
-import java.lang.reflect.Constructor
-
 
 
 // Composable function, to decide on how to display the menu button
@@ -45,7 +42,8 @@ fun MenuButton(modifier: Modifier) {
 
 // Enum to declare the different menu buttons
 enum class MenuButtonEnum {
-    HOME
+    HOME,
+    THEME
 }
 
 // Data class to store the content and onClick function for each menu button
@@ -74,7 +72,17 @@ val menuButtonLambdaMap: Map<MenuButtonEnum, MenuButtonData> = mapOf(
                 ProgramStateSingleton.instance.currentLayout = Layouts.READER
             }
         }
+    ),
+    MenuButtonEnum.THEME to MenuButtonData(
+        content = {
+            Text("Theme")
+        },
+        onClick = {
+            ProgramStateSingleton.instance.isDarkTheme =
+                !ProgramStateSingleton.instance.isDarkTheme
+        }
     )
+
 )
 
 

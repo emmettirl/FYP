@@ -1,17 +1,20 @@
 package note.reader.view.reader.components.notes
 
 import HtmlScreen
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,10 +33,13 @@ import androidx.compose.ui.unit.sp
 import com.mohamedrejeb.richeditor.model.RichTextState
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
+import com.mohamedrejeb.richeditor.ui.material3.RichTextEditorColors
+import com.mohamedrejeb.richeditor.ui.material3.RichTextEditorDefaults
 import note.reader.controller.NoteController
 import note.reader.controller.ProgramStateSingleton
 import note.reader.model.Note
 import note.reader.model.NoteState
+
 
 @Composable
 fun NoteEditor() {
@@ -107,8 +113,8 @@ fun NoteEditor() {
             modifier = Modifier.fillMaxWidth().padding(8.dp)
         )
         Row(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
-            horizontalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxWidth().background(Color.DarkGray).height(64.dp),
+            horizontalArrangement = Arrangement.Center,
         ) {
             Button(
                 onClick = {
@@ -116,7 +122,6 @@ fun NoteEditor() {
                         noteStates.joinToString("\n") { it.noteRichTextState.toMarkdown() }
                     currentScreen = "HtmlScreen"
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
             ) {
                 Text(text = "Render Markdown", color = Color.White)
             }
@@ -146,7 +151,10 @@ fun NoteEditor() {
                         )
                     }
                     RichTextEditor(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colors.background),
+                        colors = richTextEditorColorsFromTheme(),
                         state = RTState
                     )
                 }
@@ -160,3 +168,36 @@ fun NoteEditor() {
     }
 }
 
+@Composable
+fun richTextEditorColorsFromTheme(): RichTextEditorColors {
+
+    return RichTextEditorDefaults.richTextEditorColors(
+        textColor = MaterialTheme.colors.onSurface,
+        disabledTextColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+        containerColor = MaterialTheme.colors.background,
+        cursorColor = MaterialTheme.colors.primary,
+        errorCursorColor = MaterialTheme.colors.error,
+        focusedIndicatorColor = MaterialTheme.colors.primary,
+        unfocusedIndicatorColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+        errorIndicatorColor = MaterialTheme.colors.error,
+        disabledIndicatorColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+        focusedLeadingIconColor = MaterialTheme.colors.onSurface,
+        unfocusedLeadingIconColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+        disabledLeadingIconColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+        errorLeadingIconColor = MaterialTheme.colors.error,
+        focusedTrailingIconColor = MaterialTheme.colors.onSurface,
+        unfocusedTrailingIconColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+        disabledTrailingIconColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+        errorTrailingIconColor = MaterialTheme.colors.error,
+        focusedLabelColor = MaterialTheme.colors.primary,
+        unfocusedLabelColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+        disabledLabelColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+        errorLabelColor = MaterialTheme.colors.error,
+        placeholderColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+        disabledPlaceholderColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+        focusedSupportingTextColor = MaterialTheme.colors.onSurface,
+        unfocusedSupportingTextColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+        disabledSupportingTextColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+        errorSupportingTextColor = MaterialTheme.colors.error
+    )
+}

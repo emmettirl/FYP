@@ -1,5 +1,6 @@
 package note.reader.view.reader.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -37,7 +38,7 @@ fun TwoPaneView() {
 
     val iconSize = 32.dp
 
-    Row(modifier = Modifier.fillMaxSize()) {
+    Row(modifier = Modifier.fillMaxSize().background(Color.DarkGray)) {
         if (!isSwapped) {
             Surface(
                 modifier = Modifier
@@ -63,6 +64,7 @@ fun TwoPaneView() {
                 .fillMaxHeight()
                 .padding(horizontal = 4.dp)
                 .width(48.dp)
+                .background(Color.DarkGray),
         ) {
             if (!isRightPaneExpanded) {
                 if (!isLeftPaneExpanded) {

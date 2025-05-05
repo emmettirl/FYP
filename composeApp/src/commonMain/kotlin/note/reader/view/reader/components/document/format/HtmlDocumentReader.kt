@@ -2,15 +2,12 @@ package note.reader.view.reader.components.document.format
 
 import androidx.compose.runtime.Composable
 import note.reader.controller.conversion.DocumentConverter
-import note.reader.controller.conversion.DocumentConverter.convertDoctoDocx
-import note.reader.controller.conversion.LibreOfficeDriver
 import java.io.File
 
 
 @Composable
 fun HtmlDocumentReader(
     documentPath: String,
-    currentPage: Int,
     onPageChange: (Int) -> Unit,
     onPageCountChange: (Int) -> Unit
 ) {
@@ -30,5 +27,5 @@ fun HtmlDocumentReader(
         pdfPath = documentPath
     }
 
-    PdfDocumentReader(pdfPath, currentPage, onPageChange, onPageCountChange)
+    PdfDocumentReader(pdfPath, onPageChange, onPageCountChange)
 }
