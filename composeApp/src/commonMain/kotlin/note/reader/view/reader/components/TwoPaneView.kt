@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.ui.graphics.Color
 
 @Composable
@@ -32,18 +33,29 @@ fun TwoPaneView() {
     var isRightPaneExpanded by remember { mutableStateOf(false) }
     var leftPaneWeight by remember { mutableStateOf(1f) }
     var rightPaneWeight by remember { mutableStateOf(1f) }
+    var isSwapped by remember { mutableStateOf(false) }
 
     val iconSize = 32.dp
 
-
     Row(modifier = Modifier.fillMaxSize()) {
-        Surface(
-            modifier = Modifier
-                .weight(leftPaneWeight)
-                .fillMaxHeight()
-                .padding(8.dp)
-        ) {
-            DocumentReader()
+        if (!isSwapped) {
+            Surface(
+                modifier = Modifier
+                    .weight(leftPaneWeight)
+                    .fillMaxHeight()
+                    .padding(8.dp)
+            ) {
+                DocumentReader()
+            }
+        } else {
+            Surface(
+                modifier = Modifier
+                    .weight(rightPaneWeight)
+                    .fillMaxHeight()
+                    .padding(8.dp)
+            ) {
+                NoteEditor()
+            }
         }
 
         Column(
@@ -66,8 +78,13 @@ fun TwoPaneView() {
                             .weight(1f)
                             .padding(vertical = 16.dp)
                     ) {
+                        val imageVector = if (isSwapped) {
+                            Icons.AutoMirrored.Filled.ArrowBack
+                        } else {
+                            Icons.AutoMirrored.Filled.ArrowForward
+                        }
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            imageVector = imageVector,
                             contentDescription = "Expand Left Pane",
                             tint = Color.White,
                             modifier = Modifier.size(iconSize)
@@ -109,8 +126,13 @@ fun TwoPaneView() {
                             .weight(1f)
                             .padding(vertical = 16.dp)
                     ) {
+                        val imageVector = if (isSwapped) {
+                            Icons.AutoMirrored.Filled.ArrowForward
+                        } else {
+                            Icons.AutoMirrored.Filled.ArrowBack
+                        }
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            imageVector = imageVector,
                             contentDescription = "Expand Right Pane",
                             tint = Color.White,
                             modifier = Modifier.size(iconSize)
@@ -137,15 +159,66 @@ fun TwoPaneView() {
                     }
                 }
             }
+
+            if (isLeftPaneExpanded || isRightPaneExpanded) {
+                Button(
+                    onClick = {
+                        val temp = leftPaneWeight
+                        leftPaneWeight = rightPaneWeight
+                        rightPaneWeight = temp
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 16.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "Swap Weights",
+                        tint = Color.Black,
+                        modifier = Modifier.size(iconSize)
+                    )
+                }
+            }
+
+            if (!isLeftPaneExpanded && !isRightPaneExpanded) {
+                Button(
+                    onClick = {
+                        isSwapped = !isSwapped
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 16.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = "Swap Positions",
+                        tint = Color.Black,
+                        modifier = Modifier.size(iconSize)
+                    )
+                }
+            }
         }
 
-        Surface(
-            modifier = Modifier
-                .weight(rightPaneWeight)
-                .fillMaxHeight()
-                .padding(8.dp)
-        ) {
-            NoteEditor()
+        if (!isSwapped) {
+            Surface(
+                modifier = Modifier
+                    .weight(rightPaneWeight)
+                    .fillMaxHeight()
+                    .padding(8.dp)
+            ) {
+                NoteEditor()
+            }
+        } else {
+            Surface(
+                modifier = Modifier
+                    .weight(leftPaneWeight)
+                    .fillMaxHeight()
+                    .padding(8.dp)
+            ) {
+                DocumentReader()
+            }
         }
     }
 }
