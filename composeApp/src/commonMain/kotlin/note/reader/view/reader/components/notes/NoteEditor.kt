@@ -40,91 +40,92 @@ fun NoteEditor() {
     var currentScreen by remember { mutableStateOf("NoteEditor") }
     var markdownContent by remember { mutableStateOf("") }
 
-    if (currentScreen == "NoteEditor") {
-        var initialized by remember { mutableStateOf(false) }
-        var ready by remember { mutableStateOf(false) }
+    var initialized by remember { mutableStateOf(false) }
+    var ready by remember { mutableStateOf(false) }
 
-        val noteController = NoteController(ProgramStateSingleton.instance.currentDocument)
-        var noteStates: List<NoteState> by remember { mutableStateOf(listOf()) }
+    val noteController = NoteController(ProgramStateSingleton.instance.currentDocument)
+    var noteStates: List<NoteState> by remember { mutableStateOf(listOf()) }
 
-        while (noteStates.size.coerceAtLeast(1) < ProgramStateSingleton.instance.currentPageCount) {
-            val state = rememberRichTextState()
-            noteStates += NoteState(
-                note = Note(
-                    note_id = ProgramStateSingleton.instance.incCurrentIdIndex(),
-                    source_name = ProgramStateSingleton.instance.currentDocument.title,
-                    source_page = noteStates.size,
-                    content = ""
-                ),
-                noteRichTextState = state
-            )
-            if (noteStates.size == ProgramStateSingleton.instance.currentPageCount) {
-                initialized = true
-            }
-        }
-
-        SideEffect {
-            val loadedNotes = noteController.loadDocumentNotes()
-
-            if (initialized && !ready) {
-                for (note in loadedNotes) {
-                    noteStates[note.source_page].note = note
-                    noteStates[note.source_page].noteRichTextState.setText(note.content)
-                }
-                ready = true
-            }
-        }
-
-        if (initialized && ready) {
-            for (noteState in noteStates) {
-                LaunchedEffect(noteState.noteRichTextState.toMarkdown()) {
-                    noteState.note.content = noteState.noteRichTextState.toMarkdown()
-                    noteController.saveNote(noteState.note)
-                }
-            }
-        }
-
-        val pagerState = rememberPagerState(
-            initialPage = 0,
-            initialPageOffsetFraction = 0F,
-            pageCount = { noteStates.size }
+    while (noteStates.size.coerceAtLeast(1) < ProgramStateSingleton.instance.currentPageCount) {
+        val state = rememberRichTextState()
+        noteStates += NoteState(
+            note = Note(
+                note_id = ProgramStateSingleton.instance.incCurrentIdIndex(),
+                source_name = ProgramStateSingleton.instance.currentDocument.title,
+                source_page = noteStates.size,
+                content = ""
+            ),
+            noteRichTextState = state
         )
-
-        LaunchedEffect(ProgramStateSingleton.instance.currentPage) {
-            pagerState.animateScrollToPage(ProgramStateSingleton.instance.currentPage)
+        if (noteStates.size == ProgramStateSingleton.instance.currentPageCount) {
+            initialized = true
         }
+    }
 
-        Column {
-            Text(
-                text = "Notes Editor",
-                style = TextStyle(fontSize = 20.sp),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
-            )
-            Text(
-                text = "Page: ${ProgramStateSingleton.instance.currentPage + 1} / ${noteStates.size}",
-                style = TextStyle(fontSize = 20.sp),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(8.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    onClick = {
-                        markdownContent = noteStates.joinToString("\n") { it.noteRichTextState.toMarkdown() }
-                        currentScreen = "HtmlScreen"
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
-                ) {
-                    Text(text = "Render Markdown", color = Color.White)
-                }
+    SideEffect {
+        val loadedNotes = noteController.loadDocumentNotes()
+
+        if (initialized && !ready) {
+            for (note in loadedNotes) {
+                noteStates[note.source_page].note = note
+                noteStates[note.source_page].noteRichTextState.setText(note.content)
             }
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
+            ready = true
+        }
+    }
+
+    if (initialized && ready) {
+        for (noteState in noteStates) {
+            LaunchedEffect(noteState.noteRichTextState.toMarkdown()) {
+                noteState.note.content = noteState.noteRichTextState.toMarkdown()
+                noteController.saveNote(noteState.note)
+            }
+        }
+    }
+
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0F,
+        pageCount = { noteStates.size }
+    )
+
+    LaunchedEffect(ProgramStateSingleton.instance.currentPage) {
+        pagerState.animateScrollToPage(ProgramStateSingleton.instance.currentPage)
+    }
+
+    Column {
+        Text(
+            text = "Notes Editor",
+            style = TextStyle(fontSize = 20.sp),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth().padding(8.dp)
+        )
+        Text(
+            text = "Page: ${ProgramStateSingleton.instance.currentPage + 1} / ${noteStates.size}",
+            style = TextStyle(fontSize = 20.sp),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth().padding(8.dp)
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(
+                onClick = {
+                    markdownContent =
+                        noteStates.joinToString("\n") { it.noteRichTextState.toMarkdown() }
+                    currentScreen = "HtmlScreen"
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
             ) {
+                Text(text = "Render Markdown", color = Color.White)
+            }
+        }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (currentScreen == "NoteEditor") {
                 VerticalPager(
                     state = pagerState,
                     modifier = Modifier.fillMaxSize()
@@ -149,13 +150,13 @@ fun NoteEditor() {
                         state = RTState
                     )
                 }
+            } else if (currentScreen == "HtmlScreen") {
+                HtmlScreen(
+                    markdown = markdownContent,
+                    onBack = { currentScreen = "NoteEditor" }
+                )
             }
         }
-    } else if (currentScreen == "HtmlScreen") {
-        HtmlScreen(
-            markdown = markdownContent,
-            onBack = { currentScreen = "NoteEditor" }
-        )
     }
 }
 
