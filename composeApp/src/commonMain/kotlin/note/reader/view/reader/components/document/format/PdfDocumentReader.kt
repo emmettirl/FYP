@@ -65,10 +65,10 @@ fun PdfDocumentReader(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(onClick = { zoomLevel.value = (zoomLevel.value - 0.1f).coerceAtLeast(0.5f) }) {
-                Text("+\uD83D\uDD0D", fontSize = 16.sp)
+                Text("-\uD83D\uDD0D", fontSize = 16.sp)
             }
             Button(onClick = { zoomLevel.value = (zoomLevel.value + 0.1f).coerceAtMost(3f) }) {
-                Text("-\uD83D\uDD0D", fontSize = 16.sp)
+                Text("+\uD83D\uDD0D", fontSize = 16.sp)
             }
         }
 

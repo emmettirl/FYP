@@ -64,8 +64,18 @@ fun HomeLayout() {
                         ) {
                             val buttonModifier = Modifier.weight(1F).padding(all = 16.dp)
 
-                            Button(modifier = buttonModifier, onClick = {}) {
-
+                            Button(modifier = buttonModifier, onClick = {
+                                val fileDialog = java.awt.FileDialog(null as java.awt.Frame?, "Select a File", java.awt.FileDialog.LOAD)
+                                fileDialog.isVisible = true
+                                val selectedFile = fileDialog.files.firstOrNull()
+                                if (selectedFile != null) {
+                                    val targetDir = System.getenv("APPDATA") + "\\NoteReader"
+                                    val targetFile = java.io.File(targetDir, selectedFile.name)
+                                    targetDir.let { java.io.File(it).mkdirs() } // Ensure the directory exists
+                                    java.nio.file.Files.copy(selectedFile.toPath(), targetFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+                                    FileSystemController.remakeDocumentMap()
+                                }
+                            }) {
                                 Text(
                                     text = "Import",
                                     textAlign = TextAlign.Center,
