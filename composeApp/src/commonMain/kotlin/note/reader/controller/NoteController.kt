@@ -11,7 +11,6 @@ class NoteController (
 
     fun saveNote(note: Note) {
         val filepath = FileSystemController.documents_folder+"\\" + note.source_name.substringBeforeLast(".") + "_" + note.source_name.substringAfterLast(".") + "\\" + note.source_page.toString() + ".md"
-        // Open file if it exists, create it if it doesn't
         val file = File(filepath)
         if (!file.exists()) {
             file.createNewFile()

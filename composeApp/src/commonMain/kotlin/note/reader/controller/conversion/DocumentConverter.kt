@@ -74,11 +74,11 @@ object DocumentConverter {
 
                 val scale = pdfWidth / slideWidth
                 val newWidth = pdfWidth
-                val newHeight = slideHeight * scale  // Maintain aspect ratio
+                val newHeight = slideHeight * scale
 
                 val halfPageHeight = pdfHeight / 2
-                val offsetY1 = halfPageHeight + (halfPageHeight - newHeight) / 2  // Top slide centered
-                val offsetY2 = (halfPageHeight - newHeight) / 2  // Bottom slide centered
+                val offsetY1 = halfPageHeight + (halfPageHeight - newHeight) / 2
+                val offsetY2 = (halfPageHeight - newHeight) / 2
 
                 PDPageContentStream(pdfDoc, pdPage).use { contentStream ->
                     val img1 = renderSlideToImage(slides[index], slideSize)

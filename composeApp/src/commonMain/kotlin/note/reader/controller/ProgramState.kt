@@ -77,7 +77,6 @@ class ProgramState {
 
     private val _currentIdIndex: MutableState<Int> = mutableStateOf(0)
     var currentIdIndex: Int = _currentIdIndex.value
-        // Getter generates note ids
         get() = _currentIdIndex.value
 
     fun incCurrentIdIndex(): Int {

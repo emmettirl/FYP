@@ -10,7 +10,6 @@ class Document (
 ){
     val folderPath: String = path.substringBeforeLast(".")+ "_" + path.substringAfterLast(".")
 
-    // dictionary of notes in folder with same name as this file
     val notes: MutableMap<String, Note> = mutableMapOf()
 
 

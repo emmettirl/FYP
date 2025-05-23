@@ -31,7 +31,6 @@ object FileSystemController {
                     if (file.extension == "json" || file.extension == "bak") {
                         continue
                     }
-                    // if file is not a directory and not the document_map file
                     if (!file.isDirectory && file.name != document_map_filename) {
 
                         if (!document_map.containsKey(file.name)) {
@@ -40,16 +39,12 @@ object FileSystemController {
                     }
                 }
                 for (key in document_map.keys) {
-                    // if not in files, mark as missing
                     if (!File(document_map[key]!!.path).exists()) {
                         document_map[key]!!.missing = true
                     }
-                    // if marked as missing, but is in files, remove missing flag
                     if (document_map[key]!!.missing && File(document_map[key]!!.path).exists()) {
                         document_map[key]!!.missing = false
                     }
-                    // if folder for document notes does not exist, create it
-//                    println("Value: ${document_map[key].toString()}")
                     if (!File(document_map[key]!!.folderPath).isDirectory) {
                         createFolder(document_map[key]!!.folderPath)
                     }
@@ -65,7 +60,6 @@ object FileSystemController {
         }
     }
 
-    //serialize document_map to json
     fun saveDocumentMap() {
         val document_map_filepath = documents_folder + "\\" + document_map_filename
 
@@ -73,7 +67,6 @@ object FileSystemController {
         File(document_map_filepath).writeText(json)
     }
 
-    //deserialize document_map from json
     fun loadDocumentMap() {
         val document_map_filepath = documents_folder + "\\" + document_map_filename
 

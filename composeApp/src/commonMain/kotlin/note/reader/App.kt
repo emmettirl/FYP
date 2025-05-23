@@ -16,10 +16,8 @@ fun App() {
     val programState = ProgramStateSingleton.instance
 
     AppTheme(darkTheme = programState.isDarkTheme) {
-        // Initialize the file system Singleton
         FileSystemController
 
-        // Run application
             when (programState.currentLayout) {
                 Layouts.READER -> Reader()
                 Layouts.HOME -> Home()
