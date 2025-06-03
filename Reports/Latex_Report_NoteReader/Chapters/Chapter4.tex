@@ -1,0 +1,228 @@
+\chapter{Implementation Approach}
+\label{chap:implementation}
+\lhead{\emph{Implementation Approach}}
+
+\section{User Flow} 
+In order to create a well-designed, purposeful user interface (UI) for the NoteReader application, it is essential to understand and model how users interact with the system. To achieve this, I have created a series of user flow diagrams that represent key workflows within the application. These diagrams illustrate the sequential steps users take to complete specific tasks, ensuring that the interface is intuitive and aligns with user expectations.
+
+The following user flows have been designed:
+
+\begin{itemize}
+    \item \textbf{Document Import, Reading, and Note Taking Flow} (see Figure~\ref{fig:Document Import, Reading and Note taking Flow}): 
+    This flow captures the process a user follows to import a new document into the application, read the document, and take notes alongside it. It begins with the user selecting a document from their file system, proceeds through the rendering of the document in the split-view interface, and describes how notes are created, saved and reloaded. 
+
+    \item \textbf{Opening Already Imported Documents from Catalogue Flow} (see Figure~\ref{fig:OpeningAlreadyImportedDocuments}): 
+    This flow models the steps for accessing previously imported documents via the application's catalogue or library. Users can search for, sort, and select documents from their collection. Once selected, the application loads the document alongside the corresponding notes for the user to resume their work seamlessly.
+
+    \item \textbf{Git-Based File Synchronization Flow} (see Figure~\ref{fig:gitBasedSync}): 
+    This flow explains how the application handles file synchronization using a Git-based version control system. It includes steps for committing local changes, pulling updates and pushing notes and metadata to a remote repository to ensure consistency across multiple devices. Conflict resolution and large file size (LFS) are also considered in this flow to provide a smooth syncing experience.
+\end{itemize}
+
+\subsection{Document Import, Reading, and Note Taking Flow}
+This user flow begins when the user selects a document for import. The application processes the document, creating a folder in the user's file system to store notes linked to the document. The document is displayed in the split-view interface, with the left pane dedicated to rendering the document and the right pane for note-taking. The user can navigate through the document, take notes, and save them automatically. Notes are stored in lightweight plain-text files for portability.
+
+\subsection{Opening Already Imported Documents from Catalogue Flow}
+In this workflow, the user starts by accessing the application's catalogue or library. They can search for a document using keywords, tags, or filters. Once the desired document is located, the application loads it into the split-view interface, along with previously saved notes. This ensures that the user can seamlessly continue their work without losing context.
+
+\subsection{Git-Based File Synchronization Flow}
+The synchronization flow focuses on maintaining consistency across multiple devices. Users can commit their local changes (e.g., notes, updates to the catalogue) and push them to a remote Git repository. If working on another device, they can pull updates from the remote repository to retrieve the latest notes and document metadata. The system handles merge conflicts by alerting users and providing options for manual or automatic conflict resolution.
+
+These user flows ensure that NoteReader is user-centric, intuitive, and aligned with the expectations of students, researchers, and other users. Detailed diagrams for each flow are provided in Figures~\ref{fig:DocumentImportFlow}, \ref{fig:OpeningAlreadyImportedDocuments}, and \ref{fig:GitBasedSync}, respectively.
+
+
+\section{Architecture} \label{sec:Arch}
+% Describe the architecture of the solution that you have in mind, including:
+% \begin{itemize}
+%     \item Technologies involved (e.g., frameworks, programming language). 
+%     \item The hardware needed to develop the project (and to support at deployment stage)
+% \end{itemize}
+
+% Provide a high level view of the system you have in mind, including any package of classes, what is it responsible for and what other packages it communicates to. Provide a high level view of the database (or structure) needed to support the project, including what each table/document is responsible for and the hierarchy among them. You need to be as specific here as you can, why? Because this will aid you in identifying parts of the project you are vague on, this may be fine for some components but cause problems in term 2 for others. If you have hardware element in your project this is also where you provide a high level view of how these elements integrate into the project. So for a project that is cyber-physical you will have both a hardware and software architectural diagram. N.B. This is NOT a full system design but a high level overview of what you can credibly develop. This architecture should be informed by prototyping activity. 
+
+% Some of the implementation focused projects may describe how do you envision tackling the functional requirements of your project via a set of use-cases. DFDs are also helpful here to understand elements of your project that may cause problems. You should describe the role of the different parts of the architecture of the solution, and the interaction among them.
+
+\subsection{Technologies}
+\begin{itemize}
+    \item Kotlin Multiplatform: Chosen for its ability to support multiple platforms, including Windows, macOS, Linux, and mobile devices.
+    Below is a brief review of a number of other multiplatform frameworks that were considered.
+        \begin{itemize}
+            \item \textbf{Maui:}\\
+            A multiplatform framework which is part of the .NET ecosystem. This framework supports multiple operating systems, but notably lacks Linux support.
+            
+            \item \textbf{React Native:} \\
+            \href{https://reactnative.dev/docs/out-of-tree-platforms}{React Native Platform Support}\\
+            Supports all common platforms, though Linux support is community driven
+            
+            \item \textbf{Electron:}\\
+            Chromium based, supports all desktop platforms, but does not support mobile
+            
+            \item \textbf{Flutter:} \\
+            \href{[https://docs.flutter.dev/reference/supported-platforms}{Supported Platforms}\\
+            Broad support in Java Script based framework by google
+            
+        \end{itemize}
+
+    \item Document Frameworks: 
+    These frameworks are potential solutions for handling document parsing and rendering. The actual solution may change over the course of development. 
+    
+        \begin{itemize}
+            \item Markdown/HTML Support: Used to format notes and support plain-text storage, ensuring compatibility with other note-taking applications like Obsidian.
+            
+            \item \textbf{.pdf:} \\
+            The PDF format is well defined, under ISO standard 320000-1. \\
+            PDF.js would be one option, for displaying this document type, through a platform independent web view. 
+            
+            \item LibreOffice: Used to convert PowerPoint and Word files to PDF for consistent rendering.
+            
+            \item \textbf{Images (.png, .jpeg, .webp, etc)}\\
+            These can easily be displayed either directly in app, or using a web view. 
+            
+            \item SheetJS: Used to render CSV and XLSX files.
+            
+            \item Used for rendering eBooks in EPUB format.
+            
+        \end{itemize}
+
+        Regardless of the specific framework used, the architecture of the solution remains the same. An interface will be defined for document rendering, with each document type being defined as an implementation of that interface. 
+    
+        This ensures the functionality is standardized, and provides a clear pathway for adding additional document format support in future releases. 
+
+    \item Integrations with existing Systems
+    \begin{itemize}
+        \item Git, with GitHub/GitLab: Integration with version control for note synchronization.
+        \item OCR (Optical Character Recognition): Tesseract is proposed for text recognition in image-based PDFs.
+        \item Handwriting Recognition: Windows Ink support for annotating notes on touch-enabled devices.
+    \end{itemize}
+\end{itemize}
+
+
+\section{Risk Assessment}
+% Identify any potential risk precluding you from successfully complete your project. This section is really important and often neglected by students resulting in fatal risks occurring in some projects. Make sure to give this section the time it requires. Classify the risk according to their importance, possibility of arising and enumerate the decisions you can make to anticipate them or mitigate them (in case they finally arise). Table \ref{tab:ProjRisks} may help with this classification. This section should include your mitigation approach for any critical risks.
+
+\begin{table}[h]
+\centering
+\scriptsize
+\caption{Initial risk matrix}
+\begin{tabular}{|p{2cm}|p{2cm}|p{2cm}| p{2cm} |p{2cm}| p{2cm}|}
+\hline \bf Frequency/ Consequence & \bf 1-Rare & \bf 2-Remote & \bf 3-Occasional & \bf 4-Probable & \bf 5-Frequent\\ [10pt]
+
+\hline \bf 4-Fatal & \cellcolor{yellow!50} & \cellcolor{red!50} & \cellcolor{red!50} & \cellcolor{red!50} &\cellcolor{red!50} \\ [10pt]
+
+\hline \bf 3-Critical &\cellcolor{green!50} & \cellcolor{yellow!50} & \cellcolor{yellow!50} & \cellcolor{red!50} &\cellcolor{red!50} \\ [10pt]
+
+\hline \bf 2-Major & \cellcolor{green!50} & \cellcolor{green!50} & \cellcolor{yellow!50} &\cellcolor{yellow!50} &\cellcolor{red!50} \\ [10pt]
+
+\hline \bf 1-Minor & \cellcolor{green!50} & \cellcolor{green!50} & \cellcolor{green!50} &\cellcolor{yellow!50} &\cellcolor{yellow!50} \\ [10pt]
+\hline
+\end{tabular} \\
+\label{tab:ProjRisks}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Risk Table for Identified Risks}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Risk}                           & \textbf{Frequency} & \textbf{Consequence} \\
+\hline
+\rowcolor{yellow!50} Scope Creep        & Occasional        & Major                 \\
+\hline
+\rowcolor{red!50} File Corruption       & Remote            & Fatal                 \\
+\hline
+\rowcolor{yellow!50} Merge Conflicts    & Frequent          & Minor               \\
+\hline
+\rowcolor{green!50} Large File Sizes   & Rare              & Major                 \\
+\hline
+\end{tabular}
+\label{tab:ProjRisks}
+\end{table}
+
+\subsection{Risk Identification}
+\begin{itemize}
+    \item Scope Creep: The addition of features like OCR or audio-visual notes early on could divert development focus.
+    \item File Corruption: Data loss could occur due to file corruption during version control sync.
+    \item Merge Conflicts: Users may encounter conflicts when syncing files via Git.
+    \item Large File Sizes: Some file types (e.g., PowerPoint) may be too large for GitHub’s file size limitations.
+    \item Change in GitHub terms: A change in the terms of service for remote version control repositories may impact the functionality of the application. 
+\end{itemize}
+
+\subsection{Risk Mitigation Strategies}
+\begin{itemize}
+    \item Agile Methodology: Use Scrum with two-week sprints to maintain a clear development timeline.
+    \item Data Backup: Ensure automatic backups for critical files during sync.
+    \item File Locking: Implement a file-locking mechanism during note editing to prevent conflicts.
+    \item File Size Limitations: Break large files into smaller components if necessary, or consider cloud storage as a fallback option.
+    \item Support multiple git remote services. 
+\end{itemize}
+
+
+\section{Methodology}
+% Describe your personal approach on how to tackle the different parts of this project, including:
+% \begin{itemize}
+%     \item How to tackle the needed research to fulfill the background chapter. 
+%     \item How to set up your Computer Science skills to the project needs (e.g., describe your plan to learn any new technology involved on the project that you are not familiar with). 
+%     \item What core project managing approach will you follow (e.g., Waterfall, Scrum, etc).
+% \end{itemize}
+
+
+
+\section{Implementation Plan Schedule}
+Agile Scrum: Six sprints of approximately two weeks each will be used to track development progress. These Sprints will start alongside semester 2. 
+
+Technology Familiarization: Time between now and the beginning of Sprint 1 will be allocated to learning Kotlin Multiplatform and Git API integration.
+
+\begin{itemize}
+    \item Sprint 1: PDF and Text Editor with Linked Pages.
+    \item Sprint 2: Document and Note Cataloguing and Search.
+    \item Sprint 3: Improved Document Format Support.
+    \item Sprint 4: Version Control and Sync.
+    \item Sprint 5: UI/UX Enhancements.
+    \item Sprint 6: Prototyping and Integration of Additional Features.
+   
+\end{itemize}
+
+The schedule allows for iterative feedback and testing, ensuring that each module is stable before moving forward.
+
+\section{Evaluation}
+\subsection{Functional Testing}
+\begin{itemize}
+    \item Document Rendering: Ensure support for PDF, DOCX, EPUB, and PPTX files.
+    \item Note Sync: Test sync functionality across GitHub and other remote services.
+    \item Tagging and Search: Verify that tagging and search features are intuitive and fast.
+\end{itemize}
+
+\subsection{Non-Functional Testing}
+\begin{itemize}
+    \item Performance: Measure document load times and ensure responsiveness for large files.
+    \item Portability: Ensure the system works across Windows, macOS, Linux, and mobile platforms.
+    \item Reliability: Test for system stability during crashes and validate automatic recovery.
+\end{itemize}
+% Come up with an evaluation plan that allows you to measure how much have you actually achieved the goals of your project. This again is a section that is often neglected where students loose marks. How do you plan to measure the output of your project? A binary it works/does not work is insufficient. You need to be able to quantify the success against both the functional requirements and the initial idea. These are not the same as you may meet all function requirements outlined but not solve the overall problem because you have failed to revisit these and update them with new information which you learn as you are developing the project.
+
+\section{Prototype}
+Each sprint will deliver an executable iteration of the project. 
+
+A prototype will be developed by the end of Sprint 4. This prototype will feature all core functionality:
+\begin{itemize}
+    \item Document Viewing: View and navigate PDF, DOCX, EPUB, and PPTX files.
+    \item Note Editor: Create and store notes linked to specific pages.
+    \item Version Control: Sync notes using GitHub.
+    \item Split-View: User interface supporting simultaneous document view and note-taking.
+\end{itemize}
+
+The prototype will be a minimally viable product (MVP) that focuses on essential functionality, with stretch goals like OCR and handwriting support introduced in later sprints.
+
+For visual reference, several mock ups and diagrams have been produced (See Appendix B.).
+
+\begin{itemize}
+    \item A UML Class diagram detailing the high level architecture is displayed in figure~\ref{fig:CD}.
+    \item A sample UI for the PC version is represented in figure~\ref{fig:NoteReaderMock}.
+    \item A sample UI for the Mobile version of the application is represented in figure~\ref{fig:NoteReaderMobileMock}
+\end{itemize}
+
+
+
+
+
+
+% Although you do not have a fully functional project yet, you should show wireframes, snapshots or representation on how do you envision your project to look once the implementation phase has been completed. The nature of this section will vary significantly from project to project and can include anything from code snippets to snapshots of service deployments. Any prototyping you have done during the term should be summarized here that has not been captured in earlier sections. For example if you are planning to host your project using AWS in an EC2 instance you should have at least created a "hello world" setup to determine the basics, this probably should have been discussed in section \ref{sec:Arch}.

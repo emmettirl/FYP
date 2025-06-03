@@ -1,0 +1,62 @@
+\chapter{Code Snippets}
+
+\section{Early Prototyping}
+Following are a number of small code snippets with basic implementation of some core features. This code is written in C\# using WPF, and is not intended for use in the final program. These are simply early explorations into the concepts. 
+\newpage
+
+\begin{figure}
+    \centering
+    \begin{lstlisting}
+public void SaveCurrentMarkdown()
+{
+    var content = MarkdownEditor.Text;
+    if (!string.IsNullOrWhiteSpace(content))
+    {
+        var filePath = Path.Combine(notesFolderPath, $"{CurrentPageIndex}.md");
+        markdownHandler.SaveMarkdown(filePath, content);
+        UpdateSaveStatus("Saved", false);
+    }
+}
+    \end{lstlisting}
+    \caption{An example of creating a notes markdown file, which uses the current page number as the name of the file, so it can be found when the page is re-opened. }
+    \label{SaveCurrentMarkdown}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{lstlisting}
+using VersOne.Epub;
+
+public class EpubLoader
+{
+	public List<FlowDocument> LoadEpub(string epubPath)
+	{
+		var epubBook = EpubReader.ReadBook(epubPath);
+		var contentFiles = epubBook.ReadingOrder.OfType<EpubLocalTextContentFile>().Select(chapter => chapter.Content);
+		return ConvertToFlowDocuments(contentFiles, epubBook.Content.Images.Local);
+	}
+    private List<FlowDocument> ConvertToFlowDocuments(IEnumerable<string> contentFiles,
+		IReadOnlyCollection<EpubLocalByteContentFile> images)
+	{
+		if (contentFiles == null || images == null)
+			throw new ArgumentNullException("contentFiles or images cannot be null");
+
+		var flowDocuments = new List<FlowDocument>();
+
+		foreach (var content in contentFiles)
+        
+......... Specific Implementation omitted for brevity .........
+
+			var htmlPanel = new HtmlPanel();
+			htmlPanel.Text = htmlDoc.DocumentNode.OuterHtml;
+			document.Blocks.Add(new BlockUIContainer(htmlPanel));
+
+			flowDocuments.Add(document);
+		}
+
+		return flowDocuments;
+	}
+    \end{lstlisting}
+    \caption{An example approach of displaying an EPUB file in a HTML renderer}
+    \label{EPUB to HTML}
+\end{figure}

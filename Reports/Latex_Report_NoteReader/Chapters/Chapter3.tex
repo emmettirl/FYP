@@ -1,0 +1,132 @@
+\chapter{Problem - \thesistitle}
+\label{chap:problem}
+\lhead{\emph{Problem Statement}}
+% The key question to be addressed in this chapter is: "What do I want to achieve".
+
+% This chapter should comprise around 1500 words and describe the problem you are trying to solve. Try to be as specific here as you can, this will help you to anticipate possible risks such as lack of support from APIs.
+
+\section{Problem Definition}
+% Describe the problem you are trying to solve in this project. 
+
+In the modern era of digital learning, the process of note-taking has undergone a fundamental shift from traditional paper-based methods to digital mediums. Despite the availability of numerous note-taking applications and document readers, there exists a significant gap in the seamless integration of these two functionalities. Most current solutions treat either note-taking or document reading as the primary focus, with the other as an ancillary feature. This approach introduces friction into the study process, as users are forced to toggle between multiple applications to take notes and reference study materials.
+
+The proposed solution, NoteReader, aims to address this problem by creating an all-in-one, platform-agnostic application that treats both document reading and note-taking as first-class priorities. The primary objective is to develop a cohesive system that allows users to read and annotate documents, create linked notes, and access these materials in an organized and intuitive manner.
+
+
+\subsection{Current Issues}
+
+\begin{itemize}
+    \item Fragmentation of Tools: Current market solutions (e.g., Microsoft OneNote, Adobe Acrobat) often excel in one area while providing minimal support for the other. Users are forced to switch between dedicated document readers and standalone note-taking applications, leading to a disjointed study experience.
+    \item Limited Multi-Platform Support: Existing applications frequently prioritize Windows, macOS, or mobile platforms, but fail to offer full support across all devices, especially Linux.
+    \item High Cost of Subscription Services: Many applications rely on proprietary cloud storage systems (e.g., Evernote, Notion) to sync notes, necessitating paid subscriptions for cross-device access. This raises the financial barrier for students and educators.
+    \item Inadequate File Type Support: Current solutions support only a limited number of document formats. For example, EPUBs and PowerPoint slides are often not supported natively or require costly add-ons.
+    \item Loss of Context: Existing applications do not associate notes with the specific page or section of the source material they reference, making it difficult for users to revisit contextual notes.
+    \item Manual Organization and Storage Issues: Users are required to manually organize notes and study materials, often leading to misplaced documents and incomplete notes.
+    \item Data Portability: Many note-taking applications lock users into proprietary formats that limit the ability to transfer or back up notes independently. This can be a critical issue if users decide to migrate to another platform.
+\end{itemize}
+
+\subsection{Proposed Solutions}
+NoteReader proposes a unified application that simultaneously handles document reading and note-taking, offering a "split-view" interface where documents are displayed alongside a corresponding note pane. This side-by-side approach ensures that users can create notes that are contextually linked to specific pages or sections of the source document.
+
+\begin{itemize}
+    \item Split-View Interface: Each document opened in NoteReader creates a linked folder containing all notes relevant to that document. As users navigate through the document, the corresponding notes automatically load, ensuring users maintain contextual continuity.
+    \item Multi-Platform Compatibility: Built using Kotlin Multiplatform, NoteReader will be available on Windows, macOS, Linux, and mobile devices, providing true cross-platform accessibility.
+    \item Offline and Cloud-Backed Storage: Notes and documents are stored locally in plain text, ensuring data portability. Optional synchronization with GitHub or other version control platforms provides cloud-based backup and version history.
+    \item File Format Versatility: Support for a wide array of document formats, including PDF, DOCX, EPUB, PPTX, TXT, CSV, and more. This eliminates the need for users to convert files to compatible formats.
+    \item Contextual Note-Linking: Notes are linked directly to specific pages of the source document, allowing users to jump directly to the source context with a single click.
+    \item Lightweight, Portable Note Files: All notes are saved as plain text files, making them accessible and editable with other tools like Obsidian or any plain text editor.
+    \item Tagging, Searching, and Categorization: Users can categorize and tag notes for quick access, supporting efficient search and retrieval of information.
+    \item Version Control for Notes: Sync and track changes to notes using Git-based version control, offering a history of note revisions and easy restoration of previous versions.
+\end{itemize}
+
+\section{Objectives}
+% Enumerate the objectives you want to achieve in your project. Again as this is an early stage these will tend to change but there should be a rational explanation for this change. Always document your work, keep a lab book during the term that you only use for FYP!
+\subsection{Scope}
+\begin{itemize}
+    \item Create a Seamless Note to Document Link: Achieved through file system,  Ensure users can link notes to specific document pages, making it easy to reference the original context.
+    \item Achieve Multi-Platform Support: Use Kotlin Multiplatform, or similar frameworks, to provide cross-platform compatibility across Windows, macOS, Linux, and mobile devices
+    \item Facilitate Data Portability: Ensure that users' notes are stored in plain text files and that the application supports exporting notes for use in other tools like Obsidian to prevent vendor lock in. 
+    \item Optimize UI/UX for Cognitive Load: Design an intuitive user interface that reduces cognitive load during note-taking, focusing on minimalist design and efficient navigation.
+    \item Offer Customization and Personalization: Allow users to tag, categorize, and search notes, providing tailored organization options for diverse user needs.
+    \item Minimize Cost and Friction: Avoid reliance on proprietary cloud services or subscription fees by using open formats, local storage, and optional Git based version control and sync.
+\end{itemize}
+
+\subsection{Stretch-Goals}
+The following is a list of features which I would consider to be important for a final version of this project, but are not necessarily core to the functionality of a Minimum Viable Product or Prototype release. 
+
+These will be explored, time allowing, after the core scope is implemented. 
+
+\begin{itemize}
+    \item OCR for Images: Implement Optical Character Recognition (OCR) technology to convert scanned images and PDF documents into searchable and editable text. This functionality will enhance accessibility and improve the discoverability of text-based content in image files.
+    \item Handwriting Support: Enable handwriting support for touchscreen devices and styluses, allowing users to write notes directly on the document. This approach will appeal to users who prefer handwritten notes and facilitate better physio-cognitive engagement with the study material.
+    \item Dictation: Introduce voice-to-text dictation features, allowing users to transcribe spoken words directly into notes. This will benefit users who prefer to dictate notes during lectures or meetings, enabling fast, hands-free note creation.
+    \item Video and Audio, Lecture Recording with Timestamps: Develop functionality for recording live lectures or video content. Users can take time-stamped notes that are linked to specific moments in the video / sound clip, allowing them to quickly revisit relevant sections during playback.
+\end{itemize}
+
+\subsection{Out of Scope}
+The following are a list of potentially valuable additions, which fall outside the core purpose of the application. These may be useful features to provide in future updates, but will not be the focus of this project. 
+
+\begin{itemize}
+    \item AI Integration: The initial version of NoteReader will not include AI-driven features such as natural language processing (NLP), automated content summarization, or predictive note suggestions.
+    \item Web Interface: The NoteReader application will be a desktop and mobile application only, with no support for web browsers or cloud-based interfaces.
+    \item Real-Time Collaboration: Multi-user editing or real-time collaborative note-taking is outside the scope of the initial implementation.
+    \item Cloud-Only Storage: While cloud sync via GitHub is supported, the system will not offer a proprietary, always-online cloud storage solution.
+\end{itemize}
+
+\subsection{Stakeholders}
+\begin{itemize}
+    \item Students: Students across various academic disciplines are the primary beneficiaries, as NoteReader facilitates efficient study workflows and better information retention.
+    \item Researchers and Academics: Researchers who must organize large collections of study materials and notes for literature reviews and projects will benefit from the system’s tagging, linking, and search capabilities.
+    \item Educators and Lecturers: Educators can create lecture notes and materials linked to specific document pages, offering students an interactive and guided learning experience.
+    \item Journalists: Journalists who need to organize interview notes, source materials, and articles can use NoteReader’s organizational capabilities.
+\end{itemize}
+
+
+
+\section{Functional Requirements}
+% Enumerate the functional requirements you want your project to have. 
+
+% Please, do not include the use cases here. If you want to create a one-to-one mapping between functional requirements and use cases (which does not necessarily need to be the case, indeed most likely this will not be the case) do it elsewhere. Here should purely describe what do you want to do. In no case should you use this section to provide a description of how to implement them, that is for later. For people doing projects that are not heavy implementation projects (e.g. deploying an architecture or testing a novel tool in specific conditions) this structure can still be used as it will force you to think about what you plan to achieve and what possible metrics you may need to measure success.
+
+% Let me explain this with more detail. A common mistake is that people confuse the problem description with the solution approach. This is a common mistake by confusing the \emph{what} with the \emph{how}. Here we are purely focused on the what: What is this project about? What are the objectives? What are the functional and non-functional requirements? 
+
+% How are we going to do all these things? Well, this is a question for next chapter. Provided a problem, an objective or a functional requirement, obviously there will usually be many ways of doing it, thus there will be many \emph{hows}, but the definition, the \emph{what} we want to achieve will be unique.
+
+% One other display structure you may wish to use at some stage during the report is a figure array. This can also be easily done with Latex and is shown in figure \ref{fig:twosuccesskid}
+
+% \begin{figure}
+% \centering     %%% not \center
+% \subfigure[Figure A]{\label{fig:a}\includegraphics[width=0.48\textwidth]{successkid.jpg}}
+% \subfigure[Figure B]{\label{fig:b}\includegraphics[width=0.48\textwidth]{successkid.jpg}}
+% \caption{Two Success kids}
+% \label{fig:twosuccesskid}
+% \end{figure}
+
+\begin{itemize}
+    \item The system shall provide a split-view interface to allow users to view documents and take notes simultaneously.
+    \item The system shall support the import and display of PDF, EPUB, DOCX, and PPTX files
+    \item The system shall allow users to link notes to specific pages or sections of the source document.
+    \item The system shall support searching and filtering of notes and documents using tags, keywords, and categories.
+    \item The system shall support exporting notes in plain text format for use in other applications.
+    \item The system shall enable users to sync notes to cloud storage providers like GitHub using version control.
+    \item The system shall allow users to tag and categorize notes for efficient organization and retrieval.
+\end{itemize}
+
+\section{Non-Functional Requirements}
+\begin{itemize}
+    \item Performance: The system shall load and display documents without noticeable wait times on standard modern devices.
+
+    \item Usability: The user interface shall be intuitive, with clear user experience flows. 
+
+    \item Scalability: The system shall support large document files (over 25mb), and offer alternative synchronization methods for these files. 
+
+    \item Portability: The system shall support cross-platform functionality on Windows, macOS, Linux, and mobile devices.
+
+    \item Reliability: The system shall gracefully handle unexpected crashes to prevent data loss by saving notes in real-time and automatically restoring the last working state upon restart.
+
+    \item Maintainability: The system shall be modular to allow for easy updates and addition of new features.
+
+    \item Compatibility: The system shall be compatible with widely used file formats (PDF, EPUB, DOCX, PPTX, TXT, etc.).
+\end{itemize}
+
+
